@@ -1,0 +1,216 @@
+
+record(bi, "$(P):$(R):GlobalOff") {
+    field(DTYP, "asynUInt32Digital")
+    field(INP, "@asynMask(readback_all 0 0x1 500)")  # Byte, bit 0
+    field(ZNAM, "OFF")
+    field(ONAM, "ON")
+    field(SCAN, "1 second")
+}
+
+record(bi, "$(P):$(R):StandBy") {
+    field(DTYP, "asynUInt32Digital")
+    field(INP, "@asynMask(readback_all 0 0x02 500)")  # Byte, bit 1
+    field(ZNAM, "OFF")
+    field(ONAM, "ON")
+    field(SCAN, "1 second")
+}
+
+record(bi, "$(P):$(R):PowerOn") {
+    field(DTYP, "asynUInt32Digital")
+    field(INP, "@asynMask(readback_all 0 0x04 500)")  # Byte, bit 2
+    field(ZNAM, "OFF")
+    field(ONAM, "ON")
+    field(SCAN, "1 second")
+}
+
+record(bi, "$(P):$(R):Operational") {
+    field(DTYP, "asynUInt32Digital")
+    field(INP, "@asynMask(readback_all 0 0x08 500)")  # Byte, bit 3
+    field(ZNAM, "OFF")
+    field(ONAM, "ON")
+    field(SCAN, "1 second")
+}
+
+record(bi, "$(P):$(R):PowerOff") {
+    field(DTYP, "asynUInt32Digital")
+    field(INP, "@asynMask(readback_all 0 0x10 500)")  # Byte, bit 4
+    field(ZNAM, "OFF")
+    field(ONAM, "ON")
+    field(SCAN, "1 second")
+}
+
+record(bi, "$(P):$(R):Fault") {
+    field(DTYP, "asynUInt32Digital")
+    field(INP, "@asynMask(readback_all 0 0x20 500)")  # Byte, bit 5
+    field(ZNAM, "NO FAULT")
+    field(ONAM, "FAULT")
+    field(SCAN, "1 second")
+}
+
+record(bi, "$(P):$(R):LocRem") {
+    field(DTYP, "asynUInt32Digital")
+    field(INP, "@asynMask(readback_all 0 0x40 500)")  # Byte, bit 6
+    field(ZNAM, "LOCAL")
+    field(ONAM, "REMOTE")
+    field(SCAN, "1 second")
+}
+
+record(ai, "$(P):$(R):GlobalStateRaw") {
+    field(DTYP, "asynInt32")
+    field(INP, "@asynMask(readback_all 0 0xFFFF 1000)")  # Byte, bit 5
+    field(PREC, "0")             # precisione numerica (0 = intero)
+    field(SCAN, "1 second")      # scansione periodica
+   
+}
+###End offset zero on readback 
+
+
+record(longin, "$(P):$(R):GroundCurrent_raw") {
+    field(DTYP, "asynUInt32Digital")
+    field(INP, "@asynMask(readback_all 3 0xffff 1000)")  
+    field(FLNK, "$(P):$(R):GroundCurrent")
+    field(SCAN, "1 second")      # scansione periodica
+}
+
+record(ai, "$(P):$(R):MaxGroundCurrent") {
+    field(VAL, "500")
+    field(PINI, "YES")  # inizializza all'avvio
+}
+
+record(calc, "$(P):$(R):GroundCurrent") {
+    field(INPA, "$(P):$(R):GroundCurrent_raw NPP NMS")   # raw current
+    field(INPB, "$(P):$(R):MaxGroundCurrent NPP NMS")       # MaxLoad
+    #field(CALC, "(A - 32767.5)*(2*B/65535)")
+    field(CALC, "((A - 32767.5)/65535)*B")
+    #field(CALC, "32767.5 + (65535/(2*B))*A")
+    field(PREC, "3")      # Precisione double
+    field(EGU, "mA")       # Unità (mAmpere)
+    field(SCAN, "Passive")
+}
+
+###End Ground Current on readback 
+
+
+record(longin, "$(P):$(R):Current_raw") {
+    field(DTYP, "asynUInt32Digital")
+    field(INP, "@asynMask(readback_all 4 0xffff 1000)")  
+    field(SCAN, "1 second")      # scansione periodica
+    field(FLNK, "$(P):$(R):Current")
+}
+
+record(ai, "$(P):$(R):MaxLoad") {
+    field(VAL, $(IMAX))
+    field(PINI, "YES")  # inizializza all'avvio
+}
+
+record(calc, "$(P):$(R):Current") {
+    field(INPA, "$(P):$(R):Current_raw NPP NMS")   # raw current
+    field(INPB, "$(P):$(R):MaxLoad NPP NMS")       # MaxLoad
+    field(CALC, "(A /65535)*B")
+    field(PREC, "3")      # Precisione double
+    field(EGU, "A")       # Unità (Ampere)
+    field(SCAN, "Passive")
+    
+}
+###End Current on readback 
+
+
+record(longin, "$(P):$(R):Voltage_raw") {
+    field(DTYP, "asynUInt32Digital")
+    field(INP, "@asynMask(readback_all 5 0xffff 1000)")  
+    field(SCAN, "1 second")      # scansione periodica
+    field(FLNK, "$(P):$(R):Voltage")
+}
+
+record(ai, "$(P):$(R):MaxVoltage") {
+    field(VAL, $(VMAX))
+    field(PINI, "YES")  # inizializza all'avvio
+}
+
+record(calc, "$(P):$(R):Voltage") {
+    field(INPA, "$(P):$(R):Voltage_raw NPP NMS")   # raw current
+    field(INPB, "$(P):$(R):MaxVoltage NPP NMS")       # MaxLoad
+    field(CALC, "((A - 32767.5)/65535)*B")
+    field(PREC, "3")      # Precisione double
+    field(EGU, "V")       # Unità (Volt)
+    field(SCAN, "Passive")
+}
+
+###End Voltage readback 
+
+record(longin, "$(P):$(R):MaxRampSpeed") {
+    field(DTYP, "asynUInt32Digital")
+    field(INP, "@asynMask(readback_all 6 0xffff 1000)")  
+    
+    field(SCAN, "1 second")      # scansione periodica
+}
+
+
+
+record(ao, "$(P):$(R):GlobalControl") {
+    field(DTYP, "asynInt32")
+    field(OUT,  "@asyn(command_port 0 1000)")
+    field(PREC, "0")
+    field(OMSL, "supervisory")
+    #field(EGU,  "Command")
+    field(SCAN, "1 second")  
+    field(DRVH, "16")     # valore massimo
+    field(DRVL, "0")     # valore minimo
+}
+
+record(ao, "$(P):$(R):Current_SP_raw") {
+    field(DTYP, "asynInt32")
+    field(OUT,  "@asyn(command_port 1 1000)")
+    field(PREC, "0")
+    field(OMSL, "supervisory")
+    field(EGU,  "raw")
+    field(SCAN, "1 second")
+    #field(DRVH, "8")     # valore massimo
+    field(DRVL, "0")     # valore minimo
+}
+
+record(ao, "$(P):$(R):RampSpeed_SP") {
+    field(DTYP, "asynInt32")
+    field(OUT,  "@asyn(command_port 2 1000)")
+    field(PREC, "0")
+    field(OMSL, "supervisory")
+    field(EGU,  "A/s")
+    #field(DRVH, "8")     # valore massimo
+    #field(DRVL, "0")     # valore minimo
+    field(SCAN, "1 second")  
+}
+
+record(ao, "$(P):$(R):MaxIset") {
+    field(DTYP, "Soft Channel")
+    field(VAL, "280")
+}
+
+
+#alarms
+
+record(ai, "$(P):$(R):AlarmsFirst") {
+    field(DTYP, "asynInt32")
+    field(INP, "@asynMask(readback_all 1 0xFFFF 1000)")  # Byte, bit 5
+    field(PREC, "0")             # precisione numerica (0 = intero)
+    field(SCAN, "1 second")      # scansione periodica
+   
+}
+
+record(ai, "$(P):$(R):AlarmsSecond") {
+    field(DTYP, "asynInt32")
+    field(INP, "@asynMask(readback_all 2 0xFFFF 1000)")  # Byte, bit 5
+    field(PREC, "0")             # precisione numerica (0 = intero)
+    field(SCAN, "1 second")      # scansione periodica
+   
+}
+
+
+# record(stringout, "$(P):AlarmLabelsFirst") {
+#     field(VAL, "Emergency,ACOoverCurrent,PhaseFault,ChopTranstFailure,DoorOpen,ResidualCurrent,dspDCOverCurrent,pldFaultPWM,FaultCOMM,diodeOverTemp,trasnfOverTemp,cabinetOverTemp,maxDCgroundCurrent,spareFault1,spareFault2")
+#     field(PINI, "YES")
+# }
+# record(stringout, "$(P):AlarmLabelsSecond") {
+#     field(VAL, "spareFault3,spareFault4,spareFault5,LdcOverTemp,LpwmOverTemp,dspFaultRipple,excessiveCurrentError,dspBootFailure,,,,,,,,")
+#     field(PINI, "YES")
+# }
+
