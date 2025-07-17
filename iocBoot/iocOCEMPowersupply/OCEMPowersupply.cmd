@@ -9,7 +9,7 @@ OCEMPowersupply_registerRecordDeviceDriver(pdbbase)
 
 # Configure Modbus TCP communication
  
-drvAsynIPPortConfigure("MODBUS_IP", "192.168.0.154:502", 0, 0, 0)
+drvAsynIPPortConfigure("MODBUS_IP", "192.168.0.158:502", 0, 0, 0)
 modbusInterposeConfig("MODBUS_IP", 0, 0, 0)
 
 # Define Modbus ports ASYN ports

@@ -153,7 +153,7 @@ record(ao, "$(P):$(R):GlobalControl") {
     field(PREC, "0")
     field(OMSL, "supervisory")
     #field(EGU,  "Command")
-    field(SCAN, "1 second")  
+    #field(SCAN, "1 second")  
     field(DRVH, "16")     # valore massimo
     field(DRVL, "0")     # valore minimo
 }
@@ -162,12 +162,31 @@ record(ao, "$(P):$(R):Current_SP_raw") {
     field(DTYP, "asynInt32")
     field(OUT,  "@asyn(command_port 1 1000)")
     field(PREC, "0")
-    field(OMSL, "supervisory")
+    
     field(EGU,  "raw")
     field(SCAN, "1 second")
-    #field(DRVH, "8")     # valore massimo
+  
     field(DRVL, "0")     # valore minimo
 }
+
+record(ao, "$(P):$(R):Current_SP") {
+    field(PREC, "3")      # Precisione double
+    field(EGU, "A")       # Unità (Ampere)
+    
+    field(FLNK,"$(P):$(R):calc_current_raw")
+}
+#int(round((ampere_pv / 280) * 65535
+record(calcout, "$(P):$(R):calc_current_raw") {
+    field(INPA, "$(P):$(R):Current_SP")   # raw current
+    field(INPB, "$(P):$(R):MaxIset")       # MaxLoad
+    field(CALC, "((A / B )*65535)")
+    field(OUT, "$(P):$(R):Current_SP_raw")
+    field(FLNK, "$(P):$(R):Current_SP_raw")
+    field(PREC, "0")
+    
+    
+}
+
 
 record(ao, "$(P):$(R):RampSpeed_SP") {
     field(DTYP, "asynInt32")
