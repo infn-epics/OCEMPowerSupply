@@ -209,7 +209,7 @@ record(ao, "$(P):$(R):MaxIset") {
 
 record(ai, "$(P):$(R):AlarmsFirst") {
     field(DTYP, "asynInt32")
-    field(INP, "@asynMask(readback_all 1 0xFFFF 1000)")  # Byte, bit 5
+    field(INP, "@asynMask(readback_all 2 0xFFFF 1000)")  # Byte, bit 5
     field(PREC, "0")             # precisione numerica (0 = intero)
     field(SCAN, "1 second")      # scansione periodica
    
@@ -217,7 +217,7 @@ record(ai, "$(P):$(R):AlarmsFirst") {
 
 record(ai, "$(P):$(R):AlarmsSecond") {
     field(DTYP, "asynInt32")
-    field(INP, "@asynMask(readback_all 2 0xFFFF 1000)")  # Byte, bit 5
+    field(INP, "@asynMask(readback_all 1 0xFFFF 1000)")  # Byte, bit 5
     field(PREC, "0")             # precisione numerica (0 = intero)
     field(SCAN, "1 second")      # scansione periodica
    

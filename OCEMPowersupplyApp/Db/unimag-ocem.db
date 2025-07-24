@@ -31,12 +31,14 @@ record(calcout, "$(P):$(R):write_current") {
     field(DESC, "Write real setpoint")
     field(INPA, "$(P):$(R):CURRENT_SP.VAL")  # Prende il valore utente
     field(CALC, "A")
+    field(ODLY, "1.2")
     field(OUT, "$(P):$(R):Current_SP PP")  # Vero record di output
     field(FLNK, "$(P):$(R):start_ramp")
 }
 record(calcout, "$(P):$(R):start_ramp") {
     field(DESC, "Set GlobalControl to 16 (start ramp)")
     field(CALC, "16")
+    field(ODLY, "1.0")
     field(OUT, "$(P):$(R):GlobalControl PP")
 }
 
