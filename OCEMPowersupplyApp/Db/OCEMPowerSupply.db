@@ -1,7 +1,7 @@
 
 record(bi, "$(P):$(R):GlobalOff") {
     field(DTYP, "asynUInt32Digital")
-    field(INP, "@asynMask(readback_all 0 0x1 500)")  # Byte, bit 0
+    field(INP, "@asynMask($(READ_ALL) 0 0x1 500)")  # Byte, bit 0
     field(ZNAM, "OFF")
     field(ONAM, "ON")
     field(SCAN, "1 second")
@@ -9,7 +9,7 @@ record(bi, "$(P):$(R):GlobalOff") {
 
 record(bi, "$(P):$(R):StandBy") {
     field(DTYP, "asynUInt32Digital")
-    field(INP, "@asynMask(readback_all 0 0x02 500)")  # Byte, bit 1
+    field(INP, "@asynMask($(READ_ALL) 0 0x02 500)")  # Byte, bit 1
     field(ZNAM, "OFF")
     field(ONAM, "ON")
     field(SCAN, "1 second")
@@ -17,7 +17,7 @@ record(bi, "$(P):$(R):StandBy") {
 
 record(bi, "$(P):$(R):PowerOn") {
     field(DTYP, "asynUInt32Digital")
-    field(INP, "@asynMask(readback_all 0 0x04 500)")  # Byte, bit 2
+    field(INP, "@asynMask($(READ_ALL) 0 0x04 500)")  # Byte, bit 2
     field(ZNAM, "OFF")
     field(ONAM, "ON")
     field(SCAN, "1 second")
@@ -25,7 +25,7 @@ record(bi, "$(P):$(R):PowerOn") {
 
 record(bi, "$(P):$(R):Operational") {
     field(DTYP, "asynUInt32Digital")
-    field(INP, "@asynMask(readback_all 0 0x08 500)")  # Byte, bit 3
+    field(INP, "@asynMask($(READ_ALL) 0 0x08 500)")  # Byte, bit 3
     field(ZNAM, "OFF")
     field(ONAM, "ON")
     field(SCAN, "1 second")
@@ -33,7 +33,7 @@ record(bi, "$(P):$(R):Operational") {
 
 record(bi, "$(P):$(R):PowerOff") {
     field(DTYP, "asynUInt32Digital")
-    field(INP, "@asynMask(readback_all 0 0x10 500)")  # Byte, bit 4
+    field(INP, "@asynMask($(READ_ALL) 0 0x10 500)")  # Byte, bit 4
     field(ZNAM, "OFF")
     field(ONAM, "ON")
     field(SCAN, "1 second")
@@ -41,7 +41,7 @@ record(bi, "$(P):$(R):PowerOff") {
 
 record(bi, "$(P):$(R):Fault") {
     field(DTYP, "asynUInt32Digital")
-    field(INP, "@asynMask(readback_all 0 0x20 500)")  # Byte, bit 5
+    field(INP, "@asynMask($(READ_ALL) 0 0x20 500)")  # Byte, bit 5
     field(ZNAM, "NO FAULT")
     field(ONAM, "FAULT")
     field(SCAN, "1 second")
@@ -49,7 +49,7 @@ record(bi, "$(P):$(R):Fault") {
 
 record(bi, "$(P):$(R):LocRem") {
     field(DTYP, "asynUInt32Digital")
-    field(INP, "@asynMask(readback_all 0 0x40 500)")  # Byte, bit 6
+    field(INP, "@asynMask($(READ_ALL) 0 0x40 500)")  # Byte, bit 6
     field(ZNAM, "LOCAL")
     field(ONAM, "REMOTE")
     field(SCAN, "1 second")
@@ -57,7 +57,7 @@ record(bi, "$(P):$(R):LocRem") {
 
 record(ai, "$(P):$(R):GlobalStateRaw") {
     field(DTYP, "asynInt32")
-    field(INP, "@asynMask(readback_all 0 0xFFFF 1000)")  # Byte, bit 5
+    field(INP, "@asynMask($(READ_ALL) 0 0xFFFF 1000)")  # Byte, bit 5
     field(PREC, "0")             # precisione numerica (0 = intero)
     field(SCAN, "1 second")      # scansione periodica
    
@@ -67,7 +67,7 @@ record(ai, "$(P):$(R):GlobalStateRaw") {
 
 record(longin, "$(P):$(R):GroundCurrent_raw") {
     field(DTYP, "asynUInt32Digital")
-    field(INP, "@asynMask(readback_all 3 0xffff 1000)")  
+    field(INP, "@asynMask($(READ_ALL) 3 0xffff 1000)")  
     field(FLNK, "$(P):$(R):GroundCurrent")
     field(SCAN, "1 second")      # scansione periodica
 }
@@ -93,7 +93,7 @@ record(calc, "$(P):$(R):GroundCurrent") {
 
 record(longin, "$(P):$(R):Current_raw") {
     field(DTYP, "asynUInt32Digital")
-    field(INP, "@asynMask(readback_all 4 0xffff 1000)")  
+    field(INP, "@asynMask($(READ_ALL) 4 0xffff 1000)")  
     field(SCAN, "1 second")      # scansione periodica
     field(FLNK, "$(P):$(R):Current")
 }
@@ -117,7 +117,7 @@ record(calc, "$(P):$(R):Current") {
 
 record(longin, "$(P):$(R):Voltage_raw") {
     field(DTYP, "asynUInt32Digital")
-    field(INP, "@asynMask(readback_all 5 0xffff 1000)")  
+    field(INP, "@asynMask($(READ_ALL) 5 0xffff 1000)")  
     field(SCAN, "1 second")      # scansione periodica
     field(FLNK, "$(P):$(R):Voltage")
 }
@@ -140,7 +140,7 @@ record(calc, "$(P):$(R):Voltage") {
 
 record(longin, "$(P):$(R):MaxRampSpeed") {
     field(DTYP, "asynUInt32Digital")
-    field(INP, "@asynMask(readback_all 6 0xffff 1000)")  
+    field(INP, "@asynMask($(READ_ALL) 6 0xffff 1000)")  
     
     field(SCAN, "1 second")      # scansione periodica
 }
@@ -149,7 +149,7 @@ record(longin, "$(P):$(R):MaxRampSpeed") {
 
 record(ao, "$(P):$(R):GlobalControl") {
     field(DTYP, "asynInt32")
-    field(OUT,  "@asyn(command_port 0 1000)")
+    field(OUT,  "@asyn($(CMD_PORT) 0 1000)")
     field(PREC, "0")
     field(OMSL, "supervisory")
     #field(EGU,  "Command")
@@ -160,7 +160,7 @@ record(ao, "$(P):$(R):GlobalControl") {
 
 record(ao, "$(P):$(R):Current_SP_raw") {
     field(DTYP, "asynInt32")
-    field(OUT,  "@asyn(command_port 1 1000)")
+    field(OUT,  "@asyn($(CMD_PORT) 1 1000)")
     field(PREC, "0")
     
     field(EGU,  "raw")
@@ -190,7 +190,7 @@ record(calcout, "$(P):$(R):calc_current_raw") {
 
 record(ao, "$(P):$(R):RampSpeed_SP") {
     field(DTYP, "asynInt32")
-    field(OUT,  "@asyn(command_port 2 1000)")
+    field(OUT,  "@asyn($(CMD_PORT) 2 1000)")
     field(PREC, "0")
     field(OMSL, "supervisory")
     field(EGU,  "A/s")
@@ -209,7 +209,7 @@ record(ao, "$(P):$(R):MaxIset") {
 
 record(ai, "$(P):$(R):AlarmsFirst") {
     field(DTYP, "asynInt32")
-    field(INP, "@asynMask(readback_all 2 0xFFFF 1000)")  # Byte, bit 5
+    field(INP, "@asynMask($(READ_ALL) 2 0xFFFF 1000)")  # Byte, bit 5
     field(PREC, "0")             # precisione numerica (0 = intero)
     field(SCAN, "1 second")      # scansione periodica
    
@@ -217,7 +217,7 @@ record(ai, "$(P):$(R):AlarmsFirst") {
 
 record(ai, "$(P):$(R):AlarmsSecond") {
     field(DTYP, "asynInt32")
-    field(INP, "@asynMask(readback_all 1 0xFFFF 1000)")  # Byte, bit 5
+    field(INP, "@asynMask($(READ_ALL) 1 0xFFFF 1000)")  # Byte, bit 5
     field(PREC, "0")             # precisione numerica (0 = intero)
     field(SCAN, "1 second")      # scansione periodica
    

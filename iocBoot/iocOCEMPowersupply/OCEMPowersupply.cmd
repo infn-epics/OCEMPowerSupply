@@ -34,7 +34,7 @@ drvModbusAsynConfigure("readback_all", "MODBUS_IP", 1, 4, 20, 7, 0, 1000, "OCEM"
 
 
 # Load database records ## ports name are already define in db
-dbLoadRecords("$(TOP)/db/OCEMPowerSupply.db", "P=SPARC,R=OCEM:TEST,IMAX=500,VMAX=50")
+dbLoadRecords("$(TOP)/db/OCEMPowerSupply.db", "P=SPARC,R=OCEM:TEST,READ_ALL=readback_all,CMD_PORT=command_port,IMAX=100,OMAX=100,VMAX=200")
 dbLoadRecords("$(TOP)/db/unimag-ocem.db", "P=SPARC,R=OCEM:TEST")
 
 iocInit()
