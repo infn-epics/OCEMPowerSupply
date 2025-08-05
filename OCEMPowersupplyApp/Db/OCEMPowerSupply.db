@@ -106,7 +106,7 @@ record(ai, "$(P):$(R):MaxLoad") {
 record(calc, "$(P):$(R):Current") {
     field(INPA, "$(P):$(R):Current_raw NPP NMS")   # raw current
     field(INPB, "$(P):$(R):MaxLoad NPP NMS")       # MaxLoad
-    field(CALC, "(A /65535)*B")
+    field(CALC, "(A /65535)*B*1.8")
     field(PREC, "3")      # Precisione double
     field(EGU, "A")       # Unità (Ampere)
     field(SCAN, "Passive")
