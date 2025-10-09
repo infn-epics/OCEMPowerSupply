@@ -46,13 +46,22 @@ record(bi, "$(P):$(R):PowerOff") {
     field(SCAN, "1 second")
 }
 
-record(bi, "$(P):$(R):Fault") {
-    field(DTYP, "asynUInt32Digital")
-    field(INP, "@asynMask($(READ_ALL) 0 0x20 500)")  # Byte, bit 5
-    field(ZNAM, "NO FAULT")
-    field(ONAM, "FAULT")
+# record(bi, "$(P):$(R):Fault") {
+#     field(DTYP, "asynUInt32Digital")
+#     field(INP, "@asynMask($(READ_ALL) 0 0x20 500)")  # Byte, bit 5
+#     field(ZNAM, "NO FAULT")
+#     field(ONAM, "FAULT")
+#     field(SCAN, "1 second")
+# }
+record(calc, "$(P):$(R):Fault") {
+    field(DESC, "OR di AlarmsFirst e AlarmsSecond")
     field(SCAN, "1 second")
+    field(INPA, "$(P):$(R):AlarmsFirst NPP NMS")
+    field(INPB, "$(P):$(R):AlarmsSecond NPP NMS")
+    field(CALC, "A||B")
 }
+
+
 
 record(bi, "$(P):$(R):LocRem") {
     field(DTYP, "asynUInt32Digital")
