@@ -119,10 +119,17 @@ record(ai, "$(P):$(R):MaxLoad") {
     field(PINI, "YES")  # inizializza all'avvio
 }
 
+record(ai, "$(P):$(R):CorrectionFactor") {
+    field(VAL, "$(CORRECTION=1.8)")
+    field(PINI, "YES")
+}
+
+
 record(calc, "$(P):$(R):Current") {
     field(INPA, "$(P):$(R):Current_raw NPP NMS")   # raw current
     field(INPB, "$(P):$(R):MaxLoad NPP NMS")       # MaxLoad
-    field(CALC, "(A /65535)*B*1.8")
+	field(INPC, "$(P):$(R):CorrectionFactor NPP NMS")       #euristic correction factor
+    field(CALC, "(A /65535)*B*C")
     field(PREC, "3")      # Precisione double
     field(EGU, "A")       # Unità (Ampere)
     field(SCAN, "Passive")
