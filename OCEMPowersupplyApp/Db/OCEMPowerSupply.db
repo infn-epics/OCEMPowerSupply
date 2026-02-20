@@ -1,6 +1,6 @@
 record(stringout, "$(P):$(R):SWVER") {
     field(DESC, "Software IOC Version")
-    field(VAL, "$(SWVER=1.0.1)")
+    field(VAL, "$(SWVER=1.0.2)")
     field(PINI, "YES")
 }
 
