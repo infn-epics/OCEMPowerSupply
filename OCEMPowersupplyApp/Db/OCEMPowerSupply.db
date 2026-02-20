@@ -198,18 +198,22 @@ record(ao, "$(P):$(R):Current_SP") {
     
     field(FLNK,"$(P):$(R):calc_current_raw")
 }
-#int(round((ampere_pv / 280) * 65535
+#int(round((ampere_pv / 120) * 65535
 record(calcout, "$(P):$(R):calc_current_raw") {
     field(INPA, "$(P):$(R):Current_SP")   # raw current
     field(INPB, "$(P):$(R):MaxIset")       # MaxLoad
-    field(CALC, "((A / B )*65535)")
+    field(INPC, "$(P):$(R):CorrectionFactor_Set")       # MaxLoad
+    field(CALC, "((A / B )*65535*C)")
     field(OUT, "$(P):$(R):Current_SP_raw")
     field(FLNK, "$(P):$(R):Current_SP_raw")
     field(PREC, "0")
     
     
 }
-
+record(ai, "$(P):$(R):CorrectionFactor_Set") {
+    field(VAL, "$(CORRECTIONSET=1)")
+    field(PINI, "YES")
+}
 
 record(ao, "$(P):$(R):RampSpeed_SP") {
     field(DTYP, "asynInt32")
