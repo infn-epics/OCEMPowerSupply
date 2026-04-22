@@ -450,7 +450,7 @@ record(ao, "$(P):$(R):WayC_SetRamp_SP") {
     field(DRVH, $(IMAX))     # valore massimo
     field(DRVL, "-$(IMAX)") # valore minimo
     field(FLNK,"$(P):$(R):WayC_calc_ramp_raw")
-}
+} 
 record(calcout, "$(P):$(R):WayC_calc_ramp_raw") {
     field(INPA, "$(P):$(R):WayC_SetRamp_SP")   # raw current
     field(INPB, "$(IMAX)")      
