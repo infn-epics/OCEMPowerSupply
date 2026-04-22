@@ -1,0 +1,533 @@
+record(stringout, "$(P):$(R):SWVER") {
+    field(DESC, "Software IOC Version")
+    field(VAL, "$(SWVER=1.1)")
+    field(PINI, "YES")
+}
+
+
+
+
+
+
+
+
+
+
+
+# record(calc, "$(P):$(R):Fault") {
+#     field(DESC, "OR di AlarmsFirst e AlarmsSecond")
+#     field(SCAN, "1 second")
+#     field(INPA, "$(P):$(R):AlarmsFirst NPP NMS")
+#     field(INPB, "$(P):$(R):AlarmsSecond NPP NMS")
+#     field(CALC, "A||B")
+# }
+
+
+
+record(bi, "$(P):$(R):LocRem") {
+    field(DTYP, "asynUInt32Digital")
+    field(INP, "@asynMask($(READ_ALL) 0 0x40 500)")  # Byte, bit 6
+    field(ZNAM, "LOCAL")
+    field(ONAM, "REMOTE")
+    field(SCAN, "1 second")
+}
+
+record(longin, "$(P):$(R):GlobalStateRaw") {
+    field(DTYP, "asynUInt32Digital")
+    field(INP, "@asynMask($(READ_ALL) 0 0x3F 1000)")  # Byte, bit 5
+    field(SCAN, "1 second")      # scansione periodica
+   
+}
+###End offset zero on readback 
+record(longin, "$(P):$(R):WayA_State") {
+    field(DTYP, "asynUInt32Digital")
+    field(INP, "@asynMask($(READ_ALL) 1 0x1F 1000)")  # Byte, bit 5
+    field(SCAN, "1 second")      # scansione periodica
+}
+
+record(longin, "$(P):$(R):WayB_State") {
+    field(DTYP, "asynUInt32Digital")
+    field(INP, "@asynMask($(READ_ALL) 2 0x1F 1000)")  # Byte, bit 5
+    field(SCAN, "1 second")      # scansione periodica
+}
+record(longin, "$(P):$(R):WayC_State") {
+    field(DTYP, "asynUInt32Digital")
+    field(INP, "@asynMask($(READ_ALL) 3 0x1F 1000)")  # Byte, bit 5
+    field(SCAN, "1 second")      # scansione periodica
+}
+record(longin, "$(P):$(R):WayD_State") {
+    field(DTYP, "asynUInt32Digital")
+    field(INP, "@asynMask($(READ_ALL) 4 0x1F 1000)")  # Byte, bit 5
+    field(SCAN, "1 second")      # scansione periodica
+}
+
+record(longin, "$(P):$(R):GroundCurrent_raw") {
+    field(DTYP, "asynUInt32Digital")
+    field(INP, "@asynMask($(READ_ALL) 14 0xffff 1000)")  
+    field(FLNK, "$(P):$(R):GroundCurrent")
+    field(SCAN, "1 second")      # scansione periodica
+}
+
+record(ai, "$(P):$(R):MaxGroundCurrent") {
+    field(VAL, "500")
+    field(PINI, "YES")  # inizializza all'avvio
+}
+
+record(calc, "$(P):$(R):GroundCurrent") {
+    field(INPA, "$(P):$(R):GroundCurrent_raw NPP NMS")   # raw current
+    field(INPB, "$(P):$(R):MaxGroundCurrent NPP NMS")       
+    field(CALC, "(A - 32767.5)*((2*B)/65535)")
+    field(PREC, "3")      # Precisione double
+    field(EGU, "mA")       # Unità (mAmpere)
+    field(SCAN, "Passive")
+}
+
+###End Ground Current on readback 
+##channels current and voltage raw
+record(longin, "$(P):$(R):WayA_Current_raw") {
+    field(DTYP, "asynUInt32Digital")
+    field(INP, "@asynMask($(READ_ALL) 15 0xffff 1000)")  
+    field(SCAN, "1 second")      # scansione periodica
+    field(FLNK, "$(P):$(R):WayA_Current")
+}
+record(longin, "$(P):$(R):WayA_Voltage_raw") {
+    field(DTYP, "asynUInt32Digital")
+    field(INP, "@asynMask($(READ_ALL) 16 0xffff 1000)")  
+    field(SCAN, "1 second")      # scansione periodica
+    field(FLNK, "$(P):$(R):WayA_Voltage")
+}
+record(longin, "$(P):$(R):WayB_Current_raw") {
+    field(DTYP, "asynUInt32Digital")
+    field(INP, "@asynMask($(READ_ALL) 17 0xffff 1000)")  
+    field(SCAN, "1 second")      # scansione periodica
+    field(FLNK, "$(P):$(R):WayB_Current")
+}
+record(longin, "$(P):$(R):WayB_Voltage_raw") {
+    field(DTYP, "asynUInt32Digital")
+    field(INP, "@asynMask($(READ_ALL) 18 0xffff 1000)")  
+    field(SCAN, "1 second")      # scansione periodica
+    field(FLNK, "$(P):$(R):WayB_Voltage")
+}
+record(longin, "$(P):$(R):WayC_Current_raw") {
+    field(DTYP, "asynUInt32Digital")
+    field(INP, "@asynMask($(READ_ALL) 19 0xffff 1000)")  
+    field(SCAN, "1 second")      # scansione periodica
+    field(FLNK, "$(P):$(R):WayC_Current")
+}
+record(longin, "$(P):$(R):WayC_Voltage_raw") {
+    field(DTYP, "asynUInt32Digital")
+    field(INP, "@asynMask($(READ_ALL) 20 0xffff 1000)")  
+    field(SCAN, "1 second")      # scansione periodica
+    field(FLNK, "$(P):$(R):WayC_Voltage")
+}
+record(longin, "$(P):$(R):WayD_Current_raw") {
+    field(DTYP, "asynUInt32Digital")
+    field(INP, "@asynMask($(READ_ALL) 21 0xffff 1000)")  
+    field(SCAN, "1 second")      # scansione periodica
+    field(FLNK, "$(P):$(R):WayD_Current")
+}
+record(longin, "$(P):$(R):WayD_Voltage_raw") {
+    field(DTYP, "asynUInt32Digital")
+    field(INP, "@asynMask($(READ_ALL) 22 0xffff 1000)")  
+    field(SCAN, "1 second")      # scansione periodica
+    field(FLNK, "$(P):$(R):WayD_Voltage")
+}
+
+
+
+
+record(ai, "$(P):$(R):MaxCurrent") {
+    field(VAL, $(IMAX))
+    field(PINI, "YES")  # inizializza all'avvio
+}
+
+record(ai, "$(P):$(R):CorrectionFactor") {
+    field(VAL, "$(CORRECTION=1)")
+    field(PINI, "YES")
+}
+
+
+record(calc, "$(P):$(R):WayA_Current") {
+    field(INPA, "$(P):$(R):WayA_Current_raw NPP NMS")   # raw current
+    field(INPB, "$(IMAX)")       
+	field(INPC, "$(P):$(R):CorrectionFactor NPP NMS")       #euristic correction factor
+    field(CALC, "(A - 32767.5)*((2*B)/65535)")
+    field(PREC, "3")      # Precisione double
+    field(EGU, "A")       # Unità (Ampere)
+    field(SCAN, "Passive")
+}
+record(calc, "$(P):$(R):WayB_Current") {
+    field(INPA, "$(P):$(R):WayB_Current_raw NPP NMS")   # raw current
+    field(INPB, "$(IMAX)")      
+	field(INPC, "$(P):$(R):CorrectionFactor NPP NMS")       #euristic correction factor
+    field(CALC, "(A - 32767.5)*((2*B)/65535)")
+    field(PREC, "3")      # Precisione double
+    field(EGU, "A")       # Unità (Ampere)
+    field(SCAN, "Passive")
+}
+record(calc, "$(P):$(R):WayC_Current") {
+    field(INPA, "$(P):$(R):WayC_Current_raw NPP NMS")   # raw current
+    field(INPB, "$(IMAX)")       
+	field(INPC, "$(P):$(R):CorrectionFactor NPP NMS")       #euristic correction factor
+    field(CALC, "(A - 32767.5)*((2*B)/65535)")
+    field(PREC, "3")      # Precisione double
+    field(EGU, "A")       # Unità (Ampere)
+    field(SCAN, "Passive")
+}
+record(calc, "$(P):$(R):WayD_Current") {
+    field(INPA, "$(P):$(R):WayD_Current_raw NPP NMS")   # raw current
+    field(INPB, "$(IMAX)")
+	field(INPC, "$(P):$(R):CorrectionFactor NPP NMS")       #euristic correction factor
+    field(CALC, "(A - 32767.5)*((2*B)/65535)")
+    field(PREC, "3")      # Precisione double
+    field(EGU, "A")       # Unità (Ampere)
+    field(SCAN, "Passive")
+}
+###End Current on readback 
+record(calc, "$(P):$(R):WayA_Voltage") {
+    field(INPA, "$(P):$(R):WayA_Voltage_raw NPP NMS")   # raw current
+    field(INPB, "$(VMAX)")      
+	field(INPC, "$(P):$(R):CorrectionFactor NPP NMS")       #euristic correction factor
+    field(CALC, "(A - 32767.5)*((2*B)/65535)")
+    field(PREC, "3")      # Precisione double
+    field(EGU, "A")       # Unità (Ampere)
+    field(SCAN, "Passive")
+}
+record(calc, "$(P):$(R):WayB_Voltage") {
+    field(INPA, "$(P):$(R):WayB_Voltage_raw NPP NMS")   # raw current
+    field(INPB, "$(VMAX)")       
+	field(INPC, "$(P):$(R):CorrectionFactor NPP NMS")       #euristic correction factor
+    field(CALC, "(A - 32767.5)*((2*B)/65535)")
+    field(PREC, "3")      # Precisione double
+    field(EGU, "A")       # Unità (Ampere)
+    field(SCAN, "Passive")
+}
+record(calc, "$(P):$(R):WayC_Voltage") {
+    field(INPA, "$(P):$(R):WayC_Voltage_raw NPP NMS")   # raw current
+    field(INPB, "$(VMAX)") 
+	field(INPC, "$(P):$(R):CorrectionFactor NPP NMS")       #euristic correction factor
+    field(CALC, "(A - 32767.5)*((2*B)/65535)")
+    field(PREC, "3")      # Precisione double
+    field(EGU, "A")       # Unità (Ampere)
+    field(SCAN, "Passive")
+}
+record(calc, "$(P):$(R):WayD_Voltage") {
+    field(INPA, "$(P):$(R):WayD_Voltage_raw NPP NMS")   # raw current
+    field(INPB, "$(VMAX)") 
+	field(INPC, "$(P):$(R):CorrectionFactor NPP NMS")       #euristic correction factor
+    field(CALC, "(A - 32767.5)*((2*B)/65535)")
+    field(PREC, "3")      # Precisione double
+    field(EGU, "A")       # Unità (Ampere)
+    field(SCAN, "Passive")
+}
+
+record(ai, "$(P):$(R):MaxVoltage") {
+    field(VAL, $(VMAX))
+    field(PINI, "YES")  # inizializza all'avvio
+}
+
+
+###End Voltage readback 
+##CONTROLS
+
+record(ao, "$(P):$(R):GlobalControl") {
+    field(DTYP, "asynInt32")
+    field(OUT,  "@asyn($(CMD_PORT) 0 1000)")
+    field(PREC, "0")
+    field(OMSL, "supervisory")
+    #field(EGU,  "Command")
+    field(DRVH, "16")     # valore massimo
+    field(DRVL, "0")     # valore minimo
+}
+
+record(ao, "$(P):$(R):WayA_StateControl") {
+    field(DTYP, "asynInt32")
+    field(OUT,  "@asyn($(CMD_PORT) 1 1000)")
+    field(PREC, "0")
+    field(OMSL, "supervisory")
+    #field(EGU,  "Command")
+    field(DRVH, "8")     # valore massimo
+    field(DRVL, "0")     # valore minimo
+}
+
+record(ao, "$(P):$(R):WayB_StateControl") {
+    field(DTYP, "asynInt32")
+    field(OUT,  "@asyn($(CMD_PORT) 2 1000)")
+    field(PREC, "0")
+    field(OMSL, "supervisory")
+    #field(EGU,  "Command")
+    field(DRVH, "8")     # valore massimo
+    field(DRVL, "0")     # valore minimo
+}
+
+record(ao, "$(P):$(R):WayC_StateControl") {
+    field(DTYP, "asynInt32")
+    field(OUT,  "@asyn($(CMD_PORT) 3 1000)")
+    field(PREC, "0")
+    field(OMSL, "supervisory")
+    #field(EGU,  "Command")
+    field(DRVH, "8")     # valore massimo
+    field(DRVL, "0")     # valore minimo
+}
+record(ao, "$(P):$(R):WayD_StateControl") {
+    field(DTYP, "asynInt32")
+    field(OUT,  "@asyn($(CMD_PORT) 4 1000)")
+    field(PREC, "0")
+    field(OMSL, "supervisory")
+    #field(EGU,  "Command")
+    field(DRVH, "8")     # valore massimo
+    field(DRVL, "0")     # valore minimo
+}
+
+record(ao, "$(P):$(R):WayA_Iset_raw") {
+    field(DTYP, "asynInt32")
+    field(OUT,  "@asyn($(CMD_PORT) 5 1000)")
+    field(PREC, "0")
+    field(EGU,  "raw")
+    
+}
+
+record(ao, "$(P):$(R):WayB_Iset_raw") {
+    field(DTYP, "asynInt32")
+    field(OUT,  "@asyn($(CMD_PORT) 7 1000)")
+    field(PREC, "0")
+    field(EGU,  "raw")
+    
+}
+record(ao, "$(P):$(R):WayC_Iset_raw") {
+    field(DTYP, "asynInt32")
+    field(OUT,  "@asyn($(CMD_PORT) 9 1000)")
+    field(PREC, "0")
+    field(EGU,  "raw")
+    
+}
+record(ao, "$(P):$(R):WayD_Iset_raw") {
+    field(DTYP, "asynInt32")
+    field(OUT,  "@asyn($(CMD_PORT) 11 1000)")
+    field(PREC, "0")
+    field(EGU,  "raw")
+    
+}
+record(ao, "$(P):$(R):WayA_SetRamp_raw") {
+    field(DTYP, "asynInt32")
+    field(OUT,  "@asyn($(CMD_PORT) 6 1000)")
+    field(PREC, "0")
+    field(EGU,  "raw")
+    
+}
+record(ao, "$(P):$(R):WayB_SetRamp_raw") {
+    field(DTYP, "asynInt32")
+    field(OUT,  "@asyn($(CMD_PORT) 8 1000)")
+    field(PREC, "0")
+    field(EGU,  "raw")
+    
+}
+record(ao, "$(P):$(R):WayC_SetRamp_raw") {
+    field(DTYP, "asynInt32")
+    field(OUT,  "@asyn($(CMD_PORT) 10 1000)")
+    field(PREC, "0")
+    field(EGU,  "raw")
+    
+}
+record(ao, "$(P):$(R):WayD_SetRamp_raw") {
+    field(DTYP, "asynInt32")
+    field(OUT,  "@asyn($(CMD_PORT) 12 1000)")
+    field(PREC, "0")
+    field(EGU,  "raw")
+   
+}
+
+
+
+record(ao, "$(P):$(R):WayA_Current_SP") {
+    field(PREC, "3")      # Precisione double
+    field(EGU, "A")       # Unità (Ampere)
+    field(DRVH, $(IMAX))     # valore massimo
+    field(DRVL, "-$(IMAX)") # valore minimo
+    field(FLNK,"$(P):$(R):WayA_calc_current_raw")
+}
+
+record(calcout, "$(P):$(R):WayA_calc_current_raw") {
+    field(INPA, "$(P):$(R):WayA_Current_SP")   # raw current
+    field(INPB, "$(IMAX)")      
+    field(INPC, "$(P):$(R):CorrectionFactor_Set")       
+    field(CALC, "32767.5 +(32767.5/B)*A")
+    field(OUT, "$(P):$(R):WayA_Iset_raw PP")
+    #field(FLNK, "$(P):$(R):WayA_Iset_raw")
+    field(PREC, "0")
+}
+
+record(ao, "$(P):$(R):WayB_Current_SP") {
+    field(PREC, "3")      # Precisione double
+    field(EGU, "A")       # Unità (Ampere)
+    field(DRVH, $(IMAX))     # valore massimo
+    field(DRVL, "-$(IMAX)") # valore minimo
+    field(FLNK,"$(P):$(R):WayB_calc_current_raw")
+}
+
+record(calcout, "$(P):$(R):WayB_calc_current_raw") {
+    field(INPA, "$(P):$(R):WayB_Current_SP")   # raw current
+    field(INPB, "$(IMAX)")     
+    field(INPC, "$(P):$(R):CorrectionFactor_Set")      
+    field(CALC, "32767.5 +(32767.5/B)*A")
+    field(OUT, "$(P):$(R):WayB_Iset_raw PP")
+    field(PREC, "0")
+}
+record(ao, "$(P):$(R):WayC_Current_SP") {
+    field(PREC, "3")      # Precisione double
+    field(EGU, "A")       # Unità (Ampere)
+    field(DRVH, $(IMAX))     # valore massimo
+    field(DRVL, "-$(IMAX)") # valore minimo
+    field(FLNK,"$(P):$(R):WayC_calc_current_raw")
+}
+
+record(calcout, "$(P):$(R):WayC_calc_current_raw") {
+    field(INPA, "$(P):$(R):WayC_Current_SP")   # raw current
+    field(INPB, "$(IMAX)")       
+    field(INPC, "$(P):$(R):CorrectionFactor_Set")       
+    field(CALC, "32767.5 +(32767.5/B)*A")
+    field(OUT, "$(P):$(R):WayC_Iset_raw PP")
+    field(PREC, "0")
+}
+record(ao, "$(P):$(R):WayD_Current_SP") {
+    field(PREC, "3")      # Precisione double
+    field(EGU, "A")       # Unità (Ampere)
+    field(DRVH, $(IMAX))     # valore massimo
+    field(DRVL, "-$(IMAX)") # valore minimo
+    field(FLNK,"$(P):$(R):WayD_calc_current_raw")
+}
+
+record(calcout, "$(P):$(R):WayD_calc_current_raw") {
+    field(INPA, "$(P):$(R):WayD_Current_SP")   # raw current
+    field(INPB, "$(IMAX)")       
+    field(INPC, "$(P):$(R):CorrectionFactor_Set")       
+    field(CALC, "32767.5 +(32767.5/B)*A")
+    field(OUT, "$(P):$(R):WayD_Iset_raw PP")
+    field(PREC, "0")
+}
+
+record(ai, "$(P):$(R):CorrectionFactor_Set") {
+    field(VAL, "$(CORRECTIONSET=1)")
+    field(PINI, "YES")
+}
+
+record(ao, "$(P):$(R):MaxIset") {
+    field(DTYP, "Soft Channel")
+    field(VAL, $(IMAX))
+}
+
+record(ao, "$(P):$(R):WayA_SetRamp_SP") {
+    field(PREC, "3")      # Precisione double
+    field(EGU, "A/s")       # Unità (Ampere al secondo)
+    field(DRVH, $(IMAX))     # valore massimo
+    field(DRVL, "-$(IMAX)") # valore minimo
+    field(FLNK,"$(P):$(R):WayA_calc_ramp_raw")
+}
+record(calcout, "$(P):$(R):WayA_calc_ramp_raw") {
+    field(INPA, "$(P):$(R):WayA_SetRamp_SP")   # raw current
+    field(INPB, "$(IMAX)")      
+    field(CALC, "32767.5 +(32767.5/B)*A")
+    field(OUT, "$(P):$(R):WayA_SetRamp_raw PP")
+    field(PREC, "0")
+}
+record(ao, "$(P):$(R):WayB_SetRamp_SP") {
+    field(PREC, "3")      # Precisione double
+    field(EGU, "A/s")       # Unità (Ampere al secondo)
+    field(DRVH, $(IMAX))     # valore massimo
+    field(DRVL, "-$(IMAX)") # valore minimo
+    field(FLNK,"$(P):$(R):WayB_calc_ramp_raw")
+}
+record(calcout, "$(P):$(R):WayB_calc_ramp_raw") {
+    field(INPA, "$(P):$(R):WayB_SetRamp_SP")   # raw current
+    field(INPB, "$(IMAX)")      
+    field(CALC, "32767.5 +(32767.5/B)*A")
+    field(OUT, "$(P):$(R):WayB_SetRamp_raw PP")
+    field(PREC, "0")
+}
+record(ao, "$(P):$(R):WayC_SetRamp_SP") {
+    field(PREC, "3")      # Precisione double
+    field(EGU, "A/s")       # Unità (Ampere al secondo)
+    field(DRVH, $(IMAX))     # valore massimo
+    field(DRVL, "-$(IMAX)") # valore minimo
+    field(FLNK,"$(P):$(R):WayC_calc_ramp_raw")
+}
+record(calcout, "$(P):$(R):WayC_calc_ramp_raw") {
+    field(INPA, "$(P):$(R):WayC_SetRamp_SP")   # raw current
+    field(INPB, "$(IMAX)")      
+    field(CALC, "32767.5 +(32767.5/B)*A")
+    field(OUT, "$(P):$(R):WayC_SetRamp_raw PP")
+    field(PREC, "0")
+}
+record(ao, "$(P):$(R):WayD_SetRamp_SP") {
+    field(PREC, "3")      # Precisione double
+    field(EGU, "A/s")       # Unità (Ampere al secondo)
+    field(DRVH, $(IMAX))     # valore massimo
+    field(DRVL, "-$(IMAX)") # valore minimo
+    field(FLNK,"$(P):$(R):WayD_calc_ramp_raw")
+}
+record(calcout, "$(P):$(R):WayD_calc_ramp_raw") {
+    field(INPA, "$(P):$(R):WayD_SetRamp_SP")   # raw current
+    field(INPB, "$(IMAX)")      
+    field(CALC, "32767.5 +(32767.5/B)*A")
+    field(OUT, "$(P):$(R):WayD_SetRamp_raw PP")
+    field(PREC, "0")
+}
+
+
+#alarms
+
+record(longin, "$(P):$(R):GlobalAlarms") {
+    field(DTYP, "asynUInt32Digital")
+    field(INP, "@asynMask($(READ_ALL) 5 0xFFFF 1000)")  
+    field(SCAN, "1 second")      # scansione periodica
+   
+}
+record(longin, "$(P):$(R):WayA_AlarmsFirst") {
+    field(DTYP, "asynUInt32Digital")
+    field(INP, "@asynMask($(READ_ALL) 6 0xFFFF 1000)")  
+    field(SCAN, "1 second")      # scansione periodica
+}
+record(longin, "$(P):$(R):WayA_AlarmsSecond") {
+    field(DTYP, "asynUInt32Digital")
+    field(INP, "@asynMask($(READ_ALL) 7 0xFFFF 1000)")  
+    field(SCAN, "1 second")      # scansione periodica
+}
+record(longin, "$(P):$(R):WayB_AlarmsFirst") {
+    field(DTYP, "asynUInt32Digital")
+    field(INP, "@asynMask($(READ_ALL) 8 0xFFFF 1000)")  
+    field(SCAN, "1 second")      # scansione periodica
+}
+record(longin, "$(P):$(R):WayB_AlarmsSecond") {
+    field(DTYP, "asynUInt32Digital")
+    field(INP, "@asynMask($(READ_ALL) 9 0xFFFF 1000)")  
+    field(SCAN, "1 second")      # scansione periodica
+}
+record(longin, "$(P):$(R):WayC_AlarmsFirst") {
+    field(DTYP, "asynUInt32Digital")
+    field(INP, "@asynMask($(READ_ALL) 10 0xFFFF 1000)")  
+    field(SCAN, "1 second")      # scansione periodica
+}
+record(longin, "$(P):$(R):WayC_AlarmsSecond") {
+    field(DTYP, "asynUInt32Digital")
+    field(INP, "@asynMask($(READ_ALL) 11 0xFFFF 1000)")  
+    field(SCAN, "1 second")      # scansione periodica
+}
+record(longin, "$(P):$(R):WayD_AlarmsFirst") {
+    field(DTYP, "asynUInt32Digital")
+    field(INP, "@asynMask($(READ_ALL) 12 0xFFFF 1000)")  
+    field(SCAN, "1 second")      # scansione periodica
+}
+record(longin, "$(P):$(R):WayD_AlarmsSecond") {
+    field(DTYP, "asynUInt32Digital")
+    field(INP, "@asynMask($(READ_ALL) 13 0xFFFF 1000)")  
+    field(SCAN, "1 second")      # scansione periodica
+}
+# record(stringout, "$(P):AlarmLabelsFirst") {
+#     field(VAL, "Emergency,ACOoverCurrent,PhaseFault,ChopTranstFailure,DoorOpen,ResidualCurrent,dspDCOverCurrent,pldFaultPWM,FaultCOMM,diodeOverTemp,trasnfOverTemp,cabinetOverTemp,maxDCgroundCurrent,spareFault1,spareFault2")
+#     field(PINI, "YES")
+# }
+# record(stringout, "$(P):AlarmLabelsSecond") {
+#     field(VAL, "spareFault3,spareFault4,spareFault5,LdcOverTemp,LpwmOverTemp,dspFaultRipple,excessiveCurrentError,dspBootFailure,,,,,,,,")
+#     field(PINI, "YES")
+# }
+

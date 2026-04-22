@@ -1,0 +1,346 @@
+# =================================================
+# Unimag Interface for OCEM
+# =================================================
+
+# =================================================
+# Aliases for current and voltage
+# =================================================
+
+alias("$(P):$(R):WayA_Current","$(P):$(R):WAYA:CURRENT_RB")
+alias("$(P):$(R):WayA_Voltage","$(P):$(R):WAYA:VOLTAGE_RB")
+alias("$(P):$(R):WayB_Current","$(P):$(R):WAYB:CURRENT_RB")
+alias("$(P):$(R):WayB_Voltage","$(P):$(R):WAYB:VOLTAGE_RB")
+alias("$(P):$(R):WayC_Current","$(P):$(R):WAYC:CURRENT_RB")
+alias("$(P):$(R):WayC_Voltage","$(P):$(R):WAYC:VOLTAGE_RB")
+alias("$(P):$(R):WayD_Current","$(P):$(R):WAYD:CURRENT_RB")
+alias("$(P):$(R):WayD_Voltage","$(P):$(R):WAYD:VOLTAGE_RB")
+
+record(ao, "$(P):$(R):WAYA:CURRENT_SP") {
+    field(DESC, "User-facing current setpoint")
+    field(VAL, "0")
+    field(OUT, "$(P):$(R):WAYA:set_to_ON.PROC")
+}
+
+record(calcout, "$(P):$(R):WAYA:set_to_ON") {
+    field(DESC, "Force State to ON")
+    field(CALC, "1")
+    field(OUT, "$(P):$(R):WayA_StateControl PP")
+    field(FLNK, "$(P):$(R):WAYA:write_current")
+}
+record(calcout, "$(P):$(R):WAYA:write_current") {
+    field(DESC, "Write real setpoint")
+    field(INPA, "$(P):$(R):WAYA:CURRENT_SP.VAL")  # Prende il valore utente
+    field(CALC, "A")
+    field(ODLY, "1.2")
+    field(OUT, "$(P):$(R):WayA_Current_SP PP")  # Vero record di output
+    field(FLNK, "$(P):$(R):WAYA:start_ramp")
+}
+record(calcout, "$(P):$(R):WAYA:start_ramp") {
+    field(DESC, "Set State to 8 (start ramp)")
+    field(CALC, "8")
+    field(ODLY, "1.0")
+    field(OUT, "$(P):$(R):WayA_StateControl PP")
+}
+
+record(mbbi, "$(P):$(R):WAYA:STATE_RB") {
+    field(DESC, "State readback")
+    field(SCAN,"Passive")
+    field(ZRVL, "0")
+    field(ZRST, "OFF")
+    field(ONVL, "1")
+    field(ONST, "ON")
+    field(TWVL, "2")
+    field(TWST, "STANDBY")
+    field(THVL, "3")
+    field(THST, "RESET")
+    field(FRVL, "4")
+    field(FRST, "INTERLOCK")
+    field(FRSV, "MAJOR") 
+    field(FVVL, "5")
+    field(FVST, "ERROR")
+    field(FVSV, "MAJOR")
+}
+
+# State calculation (same logic as unimag.db)
+record(calcout, "$(P):$(R):WayA_state_calc") {
+    field(DESC, "Calculate state from status bits")
+    field(SCAN,"1 second")
+    field(INPA, "$(P):$(R):WayA_State")
+    field(CALC, "A=1?2:(A=2||A=4?1:(A=16?4:5))")
+    field(OUT, "$(P):$(R):WAYA:STATE_RB PP")
+    field(OOPT, "Every Time")
+}
+
+## State setpoint
+record(mbbo, "$(P):$(R):WAYA:STATE_SP") {
+    field(DESC, "State setpoint")
+    field(ZRVL, "0")
+    field(ZRST, "OFF")
+    field(ONVL, "1")
+    field(ONST, "ON")
+    field(TWVL, "2")
+    field(TWST, "STANDBY")
+    field(THVL, "3")
+    field(THST, "RESET")
+    field(FRVL, "4")
+    field(FRST, "INTERLOCK")
+    field(FVVL, "5")
+    field(FVST, "ERROR")
+    field(FLNK, "$(P):$(R):WayA_state_to_enable")
+}
+
+record(calcout, "$(P):$(R):WayA_state_to_enable") {
+    field(DESC, "Map state to Enable")
+    field(INPA, "$(P):$(R):WAYA:STATE_SP")
+    field(CALC, "A=1?1:(A=3?8:2)")
+    field(OUT, "$(P):$(R):WayA_StateControl PP")
+    field(OOPT, "Every Time")
+}
+
+#WAYB
+record(ao, "$(P):$(R):WAYB:CURRENT_SP") {
+    field(DESC, "User-facing current setpoint")
+    field(VAL, "0")
+    field(OUT, "$(P):$(R):WAYB:set_to_ON.PROC")
+}
+
+record(calcout, "$(P):$(R):WAYB:set_to_ON") {
+    field(DESC, "Force State to ON")
+    field(CALC, "1")
+    field(OUT, "$(P):$(R):WayB_StateControl PP")
+    field(FLNK, "$(P):$(R):WAYB:write_current")
+}
+record(calcout, "$(P):$(R):WAYB:write_current") {
+    field(DESC, "Write real setpoint")
+    field(INPA, "$(P):$(R):WAYB:CURRENT_SP.VAL")  # Prende il valore utente
+    field(CALC, "A")
+    field(ODLY, "1.2")
+    field(OUT, "$(P):$(R):WayB_Current_SP PP")  # Vero record di output
+    field(FLNK, "$(P):$(R):WAYB:start_ramp")
+}
+record(calcout, "$(P):$(R):WAYB:start_ramp") {
+    field(DESC, "Set State to 8 (start ramp)")
+    field(CALC, "8")
+    field(ODLY, "1.0")
+    field(OUT, "$(P):$(R):WayB_StateControl PP")
+}
+
+record(mbbi, "$(P):$(R):WAYB:STATE_RB") {
+    field(DESC, "State readback")
+    field(SCAN,"Passive")
+    field(ZRVL, "0")
+    field(ZRST, "OFF")
+    field(ONVL, "1")
+    field(ONST, "ON")
+    field(TWVL, "2")
+    field(TWST, "STANDBY")
+    field(THVL, "3")
+    field(THST, "RESET")
+    field(FRVL, "4")
+    field(FRST, "INTERLOCK")
+    field(FRSV, "MAJOR") 
+    field(FVVL, "5")
+    field(FVST, "ERROR")
+    field(FVSV, "MAJOR")
+}
+
+# State calculation (same logic as unimag.db)
+record(calcout, "$(P):$(R):WayB_state_calc") {
+    field(DESC, "Calculate state from status bits")
+    field(SCAN,"1 second")
+    field(INPA, "$(P):$(R):WayB_State")
+    field(CALC, "A=1?2:(A=2||A=4?1:(A=16?4:5))")
+    field(OUT, "$(P):$(R):WAYB:STATE_RB PP")
+    field(OOPT, "Every Time")
+}
+
+## State setpoint
+record(mbbo, "$(P):$(R):WAYB:STATE_SP") {
+    field(DESC, "State setpoint")
+    field(ZRVL, "0")
+    field(ZRST, "OFF")
+    field(ONVL, "1")
+    field(ONST, "ON")
+    field(TWVL, "2")
+    field(TWST, "STANDBY")
+    field(THVL, "3")
+    field(THST, "RESET")
+    field(FRVL, "4")
+    field(FRST, "INTERLOCK")
+    field(FVVL, "5")
+    field(FVST, "ERROR")
+    field(FLNK, "$(P):$(R):WayB_state_to_enable")
+}
+
+record(calcout, "$(P):$(R):WayB_state_to_enable") {
+    field(DESC, "Map state to Enable")
+    field(INPA, "$(P):$(R):WAYB:STATE_SP")
+    field(CALC, "A=1?1:(A=3?8:2)")
+    field(OUT, "$(P):$(R):WayB_StateControl PP")
+    field(OOPT, "Every Time")
+}
+
+#WAYC
+record(ao, "$(P):$(R):WAYC:CURRENT_SP") {
+    field(DESC, "User-facing current setpoint")
+    field(VAL, "0")
+    field(OUT, "$(P):$(R):WAYC:set_to_ON.PROC")
+}
+
+record(calcout, "$(P):$(R):WAYC:set_to_ON") {
+    field(DESC, "Force State to ON")
+    field(CALC, "1")
+    field(OUT, "$(P):$(R):WayC_StateControl PP")
+    field(FLNK, "$(P):$(R):WAYC:write_current")
+}
+record(calcout, "$(P):$(R):WAYC:write_current") {
+    field(DESC, "Write real setpoint")
+    field(INPA, "$(P):$(R):WAYC:CURRENT_SP.VAL")  # Prende il valore utente
+    field(CALC, "A")
+    field(ODLY, "1.2")
+    field(OUT, "$(P):$(R):WayC_Current_SP PP")  # Vero record di output
+    field(FLNK, "$(P):$(R):WAYC:start_ramp")
+}
+record(calcout, "$(P):$(R):WAYC:start_ramp") {
+    field(DESC, "Set State to 8 (start ramp)")
+    field(CALC, "8")
+    field(ODLY, "1.0")
+    field(OUT, "$(P):$(R):WayC_StateControl PP")
+}
+
+record(mbbi, "$(P):$(R):WAYC:STATE_RB") {
+    field(DESC, "State readback")
+    field(SCAN,"Passive")
+    field(ZRVL, "0")
+    field(ZRST, "OFF")
+    field(ONVL, "1")
+    field(ONST, "ON")
+    field(TWVL, "2")
+    field(TWST, "STANDBY")
+    field(THVL, "3")
+    field(THST, "RESET")
+    field(FRVL, "4")
+    field(FRST, "INTERLOCK")
+    field(FRSV, "MAJOR") 
+    field(FVVL, "5")
+    field(FVST, "ERROR")
+    field(FVSV, "MAJOR")
+}
+
+# State calculation (same logic as unimag.db)
+record(calcout, "$(P):$(R):WayC_state_calc") {
+    field(DESC, "Calculate state from status bits")
+    field(SCAN,"1 second")
+    field(INPA, "$(P):$(R):WayC_State")
+    field(CALC, "A=1?2:(A=2||A=4?1:(A=16?4:5))")
+    field(OUT, "$(P):$(R):WAYC:STATE_RB PP")
+    field(OOPT, "Every Time")
+}
+
+## State setpoint
+record(mbbo, "$(P):$(R):WAYC:STATE_SP") {
+    field(DESC, "State setpoint")
+    field(ZRVL, "0")
+    field(ZRST, "OFF")
+    field(ONVL, "1")
+    field(ONST, "ON")
+    field(TWVL, "2")
+    field(TWST, "STANDBY")
+    field(THVL, "3")
+    field(THST, "RESET")
+    field(FRVL, "4")
+    field(FRST, "INTERLOCK")
+    field(FVVL, "5")
+    field(FVST, "ERROR")
+    field(FLNK, "$(P):$(R):WayC_state_to_enable")
+}
+
+record(calcout, "$(P):$(R):WayC_state_to_enable") {
+    field(DESC, "Map state to Enable")
+    field(INPA, "$(P):$(R):WAYC:STATE_SP")
+    field(CALC, "A=1?1:(A=3?8:2)")
+    field(OUT, "$(P):$(R):WayC_StateControl PP")
+    field(OOPT, "Every Time")
+}
+#WAYD
+record(ao, "$(P):$(R):WAYD:CURRENT_SP") {
+    field(DESC, "User-facing current setpoint")
+    field(VAL, "0")
+    field(OUT, "$(P):$(R):WAYD:set_to_ON.PROC")
+}
+
+record(calcout, "$(P):$(R):WAYD:set_to_ON") {
+    field(DESC, "Force State to ON")
+    field(CALC, "1")
+    field(OUT, "$(P):$(R):WayD_StateControl PP")
+    field(FLNK, "$(P):$(R):WAYD:write_current")
+}
+record(calcout, "$(P):$(R):WAYD:write_current") {
+    field(DESC, "Write real setpoint")
+    field(INPA, "$(P):$(R):WAYD:CURRENT_SP.VAL")  # Prende il valore utente
+    field(CALC, "A")
+    field(ODLY, "1.2")
+    field(OUT, "$(P):$(R):WayD_Current_SP PP")  # Vero record di output
+    field(FLNK, "$(P):$(R):WAYD:start_ramp")
+}
+record(calcout, "$(P):$(R):WAYD:start_ramp") {
+    field(DESC, "Set State to 8 (start ramp)")
+    field(CALC, "8")
+    field(ODLY, "1.0")
+    field(OUT, "$(P):$(R):WayD_StateControl PP")
+}
+
+record(mbbi, "$(P):$(R):WAYD:STATE_RB") {
+    field(DESC, "State readback")
+    field(SCAN,"Passive")
+    field(ZRVL, "0")
+    field(ZRST, "OFF")
+    field(ONVL, "1")
+    field(ONST, "ON")
+    field(TWVL, "2")
+    field(TWST, "STANDBY")
+    field(THVL, "3")
+    field(THST, "RESET")
+    field(FRVL, "4")
+    field(FRST, "INTERLOCK")
+    field(FRSV, "MAJOR") 
+    field(FVVL, "5")
+    field(FVST, "ERROR")
+    field(FVSV, "MAJOR")
+}
+
+# State calculation (same logic as unimag.db)
+record(calcout, "$(P):$(R):WayD_state_calc") {
+    field(DESC, "Calculate state from status bits")
+    field(SCAN,"1 second")
+    field(INPA, "$(P):$(R):WayD_State")
+    field(CALC, "A=1?2:(A=2||A=4?1:(A=16?4:5))")
+    field(OUT, "$(P):$(R):WAYD:STATE_RB PP")
+    field(OOPT, "Every Time")
+}
+
+## State setpoint
+record(mbbo, "$(P):$(R):WAYD:STATE_SP") {
+    field(DESC, "State setpoint")
+    field(ZRVL, "0")
+    field(ZRST, "OFF")
+    field(ONVL, "1")
+    field(ONST, "ON")
+    field(TWVL, "2")
+    field(TWST, "STANDBY")
+    field(THVL, "3")
+    field(THST, "RESET")
+    field(FRVL, "4")
+    field(FRST, "INTERLOCK")
+    field(FVVL, "5")
+    field(FVST, "ERROR")
+    field(FLNK, "$(P):$(R):WayD_state_to_enable")
+}
+
+record(calcout, "$(P):$(R):WayD_state_to_enable") {
+    field(DESC, "Map state to Enable")
+    field(INPA, "$(P):$(R):WAYD:STATE_SP")
+    field(CALC, "A=1?1:(A=3?8:2)")
+    field(OUT, "$(P):$(R):WayD_StateControl PP")
+    field(OOPT, "Every Time")
+}
