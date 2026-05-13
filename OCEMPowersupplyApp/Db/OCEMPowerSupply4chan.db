@@ -522,6 +522,47 @@ record(longin, "$(P):$(R):WayD_AlarmsSecond") {
     field(INP, "@asynMask($(READ_ALL) 13 0xFFFF 1000)")  
     field(SCAN, "1 second")      # scansione periodica
 }
+record(calcout, "$(P):$(R):WayA_AlarmSummary")
+{
+    field(DESC, "WayA alarm summary")
+    field(SCAN, "1 second")
+    field(INPA, "$(P):$(R):WayA_AlarmsFirst")
+    field(INPB, "$(P):$(R):WayA_AlarmsSecond")
+    field(INPC, "$(P):$(R):GlobalAlarms")
+    field(CALC, "(A!=0)||(B!=0)||(C!=0)")
+}
+
+
+record(calcout, "$(P):$(R):WayB_AlarmSummary")
+{
+    field(DESC, "WayB alarm summary")
+    field(SCAN, "1 second")
+    field(INPA, "$(P):$(R):WayB_AlarmsFirst")
+    field(INPB, "$(P):$(R):WayB_AlarmsSecond")
+    field(INPC, "$(P):$(R):GlobalAlarms")
+    field(CALC, "(A!=0)||(B!=0)||(C!=0)")
+}
+
+record(calcout, "$(P):$(R):WayC_AlarmSummary")
+{
+    field(DESC, "WayC alarm summary")
+    field(SCAN, "1 second")
+    field(INPA, "$(P):$(R):WayC_AlarmsFirst")
+    field(INPB, "$(P):$(R):WayC_AlarmsSecond")
+    field(INPC, "$(P):$(R):GlobalAlarms")
+    field(CALC, "(A!=0)||(B!=0)||(C!=0)")
+}
+
+record(calcout, "$(P):$(R):WayD_AlarmSummary")
+{
+    field(DESC, "WayD alarm summary")
+    field(SCAN, "1 second")
+    field(INPA, "$(P):$(R):WayD_AlarmsFirst")
+    field(INPB, "$(P):$(R):WayD_AlarmsSecond")
+    field(INPC, "$(P):$(R):GlobalAlarms")
+    field(CALC, "(A!=0)||(B!=0)||(C!=0)")
+}
+
 # record(stringout, "$(P):AlarmLabelsFirst") {
 #     field(VAL, "Emergency,ACOoverCurrent,PhaseFault,ChopTranstFailure,DoorOpen,ResidualCurrent,dspDCOverCurrent,pldFaultPWM,FaultCOMM,diodeOverTemp,trasnfOverTemp,cabinetOverTemp,maxDCgroundCurrent,spareFault1,spareFault2")
 #     field(PINI, "YES")

@@ -66,7 +66,8 @@ record(calcout, "$(P):$(R):WayA_state_calc") {
     field(DESC, "Calculate state from status bits")
     field(SCAN,"1 second")
     field(INPA, "$(P):$(R):WayA_State")
-    field(CALC, "A=1?2:(A=2||A=4?1:(A=16?4:5))")
+    field(INPB, "$(P):$(R):WayA_AlarmSummary")
+    field(CALC, "B=1?4:(A=1?2:(A=2||A=4?1:(A=16?4:5)))")
     field(OUT, "$(P):$(R):WAYA:STATE_RB PP")
     field(OOPT, "Every Time")
 }
@@ -149,7 +150,8 @@ record(calcout, "$(P):$(R):WayB_state_calc") {
     field(DESC, "Calculate state from status bits")
     field(SCAN,"1 second")
     field(INPA, "$(P):$(R):WayB_State")
-    field(CALC, "A=1?2:(A=2||A=4?1:(A=16?4:5))")
+    field(INPB, "$(P):$(R):WayB_AlarmSummary")
+    field(CALC, "B=1?4:(A=1?2:(A=2||A=4?1:(A=16?4:5)))")
     field(OUT, "$(P):$(R):WAYB:STATE_RB PP")
     field(OOPT, "Every Time")
 }
@@ -232,7 +234,8 @@ record(calcout, "$(P):$(R):WayC_state_calc") {
     field(DESC, "Calculate state from status bits")
     field(SCAN,"1 second")
     field(INPA, "$(P):$(R):WayC_State")
-    field(CALC, "A=1?2:(A=2||A=4?1:(A=16?4:5))")
+    field(INPB, "$(P):$(R):WayC_AlarmSummary")
+    field(CALC, "B=1?4:(A=1?2:(A=2||A=4?1:(A=16?4:5)))")
     field(OUT, "$(P):$(R):WAYC:STATE_RB PP")
     field(OOPT, "Every Time")
 }
@@ -314,7 +317,8 @@ record(calcout, "$(P):$(R):WayD_state_calc") {
     field(DESC, "Calculate state from status bits")
     field(SCAN,"1 second")
     field(INPA, "$(P):$(R):WayD_State")
-    field(CALC, "A=1?2:(A=2||A=4?1:(A=16?4:5))")
+    field(INPB, "$(P):$(R):WayD_AlarmSummary")
+    field(CALC, "B=1?4:(A=1?2:(A=2||A=4?1:(A=16?4:5)))")
     field(OUT, "$(P):$(R):WAYD:STATE_RB PP")
     field(OOPT, "Every Time")
 }
