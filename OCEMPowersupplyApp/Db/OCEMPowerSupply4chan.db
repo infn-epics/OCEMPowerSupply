@@ -563,41 +563,105 @@ record(calcout, "$(P):$(R):WayD_AlarmSummary")
     field(CALC, "(A!=0)||(B!=0)||(C!=0)")
 }
 
-record(waveform, "$(P):$(R):Alarm1Text")
-{
-    field(DESC, "Alarm bit descriptions")
-    field(FTVL, "STRING")
-    field(NELM, "16")
 
-    field(VAL, "
-        DC Overcurrent,
-        Air Flow failure,
-        Transistor Bank Overcurrent,
-        Transistor Bank OverTemp,
-        PosTransistorBankFusesFail_Warn,
-        PosTransistorBankFusesFail_Alarm,
-        NegTransistorBankFusesFail_Warn,
-        NegTransistorBankFusesFail_Alarm,
-        DC Fuses Failure,
-        external Alarm1,
-        external Alarm2,
-        external Alarm3,
-        external Alarm4,
-        external Alarm5,
-        excessive Current Ripple,
-        Fault Control")
+
+
+#labels per allarmi
+record(stringout, "$(P):$(R):alarmFirstlabel0")
+{
+    field(DESC, "Alarm bit 0 description")
+    field(VAL, "DC Overcurrent")
+}
+record(stringout, "$(P):$(R):alarmFirstlabel1")
+{
+    field(DESC, "Alarm bit 1 description")
+    field(VAL, "Air Flow failure")
+}
+record(stringout, "$(P):$(R):alarmFirstlabel2")
+{
+    field(DESC, "Alarm bit 2 description")
+    field(VAL, "Transistor Bank Overcurrent")
+}
+record(stringout, "$(P):$(R):alarmFirstlabel3")
+{
+    field(DESC, "Alarm bit 3 description")
+    field(VAL, "Transistor Bank OverTemp")
+}
+record(stringout, "$(P):$(R):alarmFirstlabel4")
+{
+    field(DESC, "Alarm bit 4 description")
+    field(VAL, "PosTransistorBankFusesFail_Warn")
+}
+record(stringout, "$(P):$(R):alarmFirstlabel5")
+{
+    field(DESC, "Alarm bit 5 description")
+    field(VAL, "PosTransistorBankFusesFail_Alarm")
+}
+record(stringout, "$(P):$(R):alarmFirstlabel6")
+{
+    field(DESC, "Alarm bit 6 description")
+    field(VAL, "NegTransistorBankFusesFail_Warn")
+}
+record(stringout, "$(P):$(R):alarmFirstlabel7")
+{
+    field(DESC, "Alarm bit 7 description")
+    field(VAL, "NegTransistorBankFusesFail_Alarm")
+}
+record(stringout, "$(P):$(R):alarmFirstlabel8")
+{
+    field(DESC, "Alarm bit 8 description")
+    field(VAL, "DC Fuses Failure")
+}
+record(stringout, "$(P):$(R):alarmFirstlabel9")
+{
+    field(DESC, "Alarm bit 9 description")
+    field(VAL, "external Alarm1")
+}
+record(stringout, "$(P):$(R):alarmFirstlabel10")
+{
+    field(DESC, "Alarm bit 10 description")
+    field(VAL, "external Alarm2")
+}
+record(stringout, "$(P):$(R):alarmFirstlabel11")
+{
+    field(DESC, "Alarm bit 11 description")
+    field(VAL, "external Alarm3")
+}
+record(stringout, "$(P):$(R):alarmFirstlabel12")
+{
+    field(DESC, "Alarm bit 12 description")
+    field(VAL, "external Alarm4")
+}
+record(stringout, "$(P):$(R):alarmFirstlabel13")
+{
+    field(DESC, "Alarm bit 13 description")
+    field(VAL, "external Alarm5")
+}
+record(stringout, "$(P):$(R):alarmFirstlabel14")
+{
+    field(DESC, "Alarm bit 14 description")
+    field(VAL, "excessive Current Ripple")
+}
+record(stringout, "$(P):$(R):alarmFirstlabel15")
+{
+    field(DESC, "Alarm bit 15 description")
+    field(VAL, "Fault Control")
 }
 
-record(waveform, "$(P):$(R):Alarm2Text")
+
+
+record(stringout, "$(P):$(R):alarmSecondlabel0")
 {
-    field(DESC, "Alarm bit descriptions")
-    field(FTVL, "STRING")
-    field(NELM, "3")
-
-    field(VAL, "
-        Fault Comm,
-        Excessive Current Error,
-        DSP Boot Failure")
+    field(DESC, "Alarm bit 0 description")
+    field(VAL, "DC Overcurrent")
 }
-
-
+record(stringout, "$(P):$(R):alarmSecondlabel1")
+{
+    field(DESC, "Alarm bit 1 description")
+    field(VAL, "Air Flow failure")
+}
+record(stringout, "$(P):$(R):alarmSecondlabel2")
+{
+    field(DESC, "Alarm bit 2 description")
+    field(VAL, "Transistor Bank Overcurrent")
+}
