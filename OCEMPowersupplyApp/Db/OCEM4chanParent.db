@@ -1,0 +1,6 @@
+record(stringin, "$(P):$(CHANNEL):PARENT")
+{
+    field(DESC, "Parent crate/device")
+    field(VAL,  "$(P):$(CRATE)")
+    field(PINI, "YES")
+}

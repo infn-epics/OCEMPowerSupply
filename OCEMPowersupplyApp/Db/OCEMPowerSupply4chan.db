@@ -563,12 +563,41 @@ record(calcout, "$(P):$(R):WayD_AlarmSummary")
     field(CALC, "(A!=0)||(B!=0)||(C!=0)")
 }
 
-# record(stringout, "$(P):AlarmLabelsFirst") {
-#     field(VAL, "Emergency,ACOoverCurrent,PhaseFault,ChopTranstFailure,DoorOpen,ResidualCurrent,dspDCOverCurrent,pldFaultPWM,FaultCOMM,diodeOverTemp,trasnfOverTemp,cabinetOverTemp,maxDCgroundCurrent,spareFault1,spareFault2")
-#     field(PINI, "YES")
-# }
-# record(stringout, "$(P):AlarmLabelsSecond") {
-#     field(VAL, "spareFault3,spareFault4,spareFault5,LdcOverTemp,LpwmOverTemp,dspFaultRipple,excessiveCurrentError,dspBootFailure,,,,,,,,")
-#     field(PINI, "YES")
-# }
+record(waveform, "$(P):$(R):Alarm1Text")
+{
+    field(DESC, "Alarm bit descriptions")
+    field(FTVL, "STRING")
+    field(NELM, "16")
+
+    field(VAL, "
+        DC Overcurrent,
+        Air Flow failure,
+        Transistor Bank Overcurrent,
+        Transistor Bank OverTemp,
+        PosTransistorBankFusesFail_Warn,
+        PosTransistorBankFusesFail_Alarm,
+        NegTransistorBankFusesFail_Warn,
+        NegTransistorBankFusesFail_Alarm,
+        DC Fuses Failure,
+        external Alarm1,
+        external Alarm2,
+        external Alarm3,
+        external Alarm4,
+        external Alarm5,
+        excessive Current Ripple,
+        Fault Control")
+}
+
+record(waveform, "$(P):$(R):Alarm2Text")
+{
+    field(DESC, "Alarm bit descriptions")
+    field(FTVL, "STRING")
+    field(NELM, "3")
+
+    field(VAL, "
+        Fault Comm,
+        Excessive Current Error,
+        DSP Boot Failure")
+}
+
 

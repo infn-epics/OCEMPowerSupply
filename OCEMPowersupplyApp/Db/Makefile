@@ -8,6 +8,7 @@ DB += OCEMPowerSupply.db
 DB += OCEMPowerSupply4chan.db 
 DB += unimag-ocem.db 
 DB += unimag-ocem4chan.db 
+DB += OCEM4chanParent.db
 # If <anyname>.db template is not named <anyname>*.template add
 # <anyname>_TEMPLATE = <templatename>
 
