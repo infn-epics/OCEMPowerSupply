@@ -4,26 +4,6 @@ record(stringout, "$(P):$(R):SWVER") {
     field(PINI, "YES")
 }
 
-
-
-
-
-
-
-
-
-
-
-# record(calc, "$(P):$(R):Fault") {
-#     field(DESC, "OR di AlarmsFirst e AlarmsSecond")
-#     field(SCAN, "1 second")
-#     field(INPA, "$(P):$(R):AlarmsFirst NPP NMS")
-#     field(INPB, "$(P):$(R):AlarmsSecond NPP NMS")
-#     field(CALC, "A||B")
-# }
-
-
-
 record(bi, "$(P):$(R):LocRem") {
     field(DTYP, "asynUInt32Digital")
     field(INP, "@asynMask($(READ_ALL) 0 0x40 500)")  # Byte, bit 6
@@ -145,40 +125,56 @@ record(ai, "$(P):$(R):CorrectionFactor") {
     field(VAL, "$(CORRECTION=1)")
     field(PINI, "YES")
 }
-
+record(ai, "$(P):$(R):CorrectionFactor_A") {
+    field(VAL, "$(CORRECTION_A=1)")
+    field(PINI, "YES")
+}
 
 record(calc, "$(P):$(R):WayA_Current") {
     field(INPA, "$(P):$(R):WayA_Current_raw NPP NMS")   # raw current
     field(INPB, "$(IMAX)")       
-	field(INPC, "$(P):$(R):CorrectionFactor NPP NMS")       #euristic correction factor
-    field(CALC, "(A - 32767.5)*((2*B)/65535)")
+	field(INPC, "$(P):$(R):CorrectionFactor_A NPP NMS")       #euristic correction factor
+    field(CALC, "(A - 32767.5)*((2*B)/65535)*C")
     field(PREC, "3")      # Precisione double
     field(EGU, "A")       # Unità (Ampere)
     field(SCAN, "Passive")
 }
+record(ai, "$(P):$(R):CorrectionFactor_B") {
+    field(VAL, "$(CORRECTION_B=1)")
+    field(PINI, "YES")
+}
+
 record(calc, "$(P):$(R):WayB_Current") {
     field(INPA, "$(P):$(R):WayB_Current_raw NPP NMS")   # raw current
     field(INPB, "$(IMAX)")      
-	field(INPC, "$(P):$(R):CorrectionFactor NPP NMS")       #euristic correction factor
-    field(CALC, "(A - 32767.5)*((2*B)/65535)")
+	field(INPC, "$(P):$(R):CorrectionFactor_B NPP NMS")       #euristic correction factor
+    field(CALC, "(A - 32767.5)*((2*B)/65535)*C")
     field(PREC, "3")      # Precisione double
     field(EGU, "A")       # Unità (Ampere)
     field(SCAN, "Passive")
+}
+record(ai, "$(P):$(R):CorrectionFactor_C") {
+    field(VAL, "$(CORRECTION_C=1)")
+    field(PINI, "YES")
 }
 record(calc, "$(P):$(R):WayC_Current") {
     field(INPA, "$(P):$(R):WayC_Current_raw NPP NMS")   # raw current
     field(INPB, "$(IMAX)")       
-	field(INPC, "$(P):$(R):CorrectionFactor NPP NMS")       #euristic correction factor
-    field(CALC, "(A - 32767.5)*((2*B)/65535)")
+	field(INPC, "$(P):$(R):CorrectionFactor_C NPP NMS")       #euristic correction factor
+    field(CALC, "(A - 32767.5)*((2*B)/65535)*C")
     field(PREC, "3")      # Precisione double
     field(EGU, "A")       # Unità (Ampere)
     field(SCAN, "Passive")
 }
+record(ai, "$(P):$(R):CorrectionFactor_D") {
+    field(VAL, "$(CORRECTION_D=1)")
+    field(PINI, "YES")
+}
 record(calc, "$(P):$(R):WayD_Current") {
     field(INPA, "$(P):$(R):WayD_Current_raw NPP NMS")   # raw current
     field(INPB, "$(IMAX)")
-	field(INPC, "$(P):$(R):CorrectionFactor NPP NMS")       #euristic correction factor
-    field(CALC, "(A - 32767.5)*((2*B)/65535)")
+	field(INPC, "$(P):$(R):CorrectionFactor_D NPP NMS")       #euristic correction factor
+    field(CALC, "(A - 32767.5)*((2*B)/65535)*C")
     field(PREC, "3")      # Precisione double
     field(EGU, "A")       # Unità (Ampere)
     field(SCAN, "Passive")
