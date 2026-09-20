@@ -92,3 +92,41 @@ This script configures and starts the IOC for the ICPDAS 7060 module. Key steps 
    ```bash
    git clone https://github.com/yourusername/modbus-template.git
    cd modbus-template
+
+## UNIMAG states and watchdogs
+
+`STATE_RB` uses the state enumeration shared by the UNIMAG power-supply IOCs:
+
+| Value | State | Alarm | Meaning |
+|-------|-------|-------|---------|
+| 0 | `OFF` | - | Power supply off |
+| 1 | `ON` | - | Output on |
+| 2 | `STANDBY` | - | Ready, output disabled |
+| 3 | `FAULT` | MAJOR | Power supply fault |
+| 4 | `EXT_INTLK` | MAJOR | External interlock |
+| 5 | `CONN_FAULT` | MAJOR | Communication errors (the status read fails) |
+| 6 | `SP_NOT_REACHED` | MINOR | Current setpoint not reached |
+| 7 | `ST_NOT_REACHED` | MAJOR | State not reached (UNIMAG failure) |
+
+Faults win over `ST_NOT_REACHED`, which wins over `SP_NOT_REACHED`. Values from 8 up are
+additional, device specific states. `STATE_SP` accepts `OFF`, `ON`, `STANDBY` and `RESET`.
+
+Single channel (`unimag-ocem.db`): `FAULT` from `AlarmsFirst`/`AlarmsSecond`, `STANDBY` from the
+standby bit, `CONN_FAULT` when `Operational` cannot be read. Four channel (`unimag-ocem4chan.db`):
+every way has its own set, prefixed `$(P):$(R):WAYx:` (`WAYA`..`WAYD`); `EXT_INTLK` from the way
+alarm summary (or state 16), `FAULT` for an unknown way state, `CONN_FAULT` when `WayX_State`
+cannot be read.
+
+### UNIMAG configuration
+
+| Parameter | PV (per way: `WAYx:` prefix on 4 channel) | Description | Default | Units |
+|-----------|----|-------------|---------|-------|
+| `SET_TOLERANCE` | `SET_TOLERANCE` | Current setpoint tolerance (0 disables the setpoint check) | 1.0 | Amperes |
+| `ZERO_TOLERANCE` | `ZERO_TOLERANCE` | Zero current tolerance (a zero setpoint counts as reached within it) | 0.5 | Amperes |
+| `SET_TIMEOUT_S` | `SET_TIMEOUT_S` | Setpoint / state timeout (restarts on progress) | 30 | Seconds |
+
+They are db macros (same names) and live PVs, so they can also be changed at runtime. The
+timeout restarts whenever the readback gets closer to the setpoint, on a new setpoint and on a
+new state command. The setpoint check only runs while the supply is `ON`, and the state check
+is armed by the first `STATE_SP` command after boot, so a supply left running is not reported.
+`SP_NOT_REACHED` and `ST_NOT_REACHED` (and `SP_ERR`, `SP_WDOG`, `ST_WDOG`) are readable PVs.

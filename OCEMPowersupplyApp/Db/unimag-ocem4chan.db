@@ -44,7 +44,7 @@ record(calcout, "$(P):$(R):WAYA:start_ramp") {
 
 record(mbbi, "$(P):$(R):WAYA:STATE_RB") {
     field(DESC, "State readback")
-    field(SCAN,"Passive")
+    field(SCAN, "Passive")
     field(ZRVL, "0")
     field(ZRST, "OFF")
     field(ONVL, "1")
@@ -52,13 +52,20 @@ record(mbbi, "$(P):$(R):WAYA:STATE_RB") {
     field(TWVL, "2")
     field(TWST, "STANDBY")
     field(THVL, "3")
-    field(THST, "RESET")
+    field(THST, "FAULT")
+    field(THSV, "MAJOR")
     field(FRVL, "4")
-    field(FRST, "INTERLOCK")
-    field(FRSV, "MAJOR") 
+    field(FRST, "EXT_INTLK")
+    field(FRSV, "MAJOR")
     field(FVVL, "5")
-    field(FVST, "ERROR")
+    field(FVST, "CONN_FAULT")
     field(FVSV, "MAJOR")
+    field(SXVL, "6")
+    field(SXST, "SP_NOT_REACHED")
+    field(SXSV, "MINOR")
+    field(SVVL, "7")
+    field(SVST, "ST_NOT_REACHED")
+    field(SVSV, "MAJOR")
 }
 
 # State calculation (same logic as unimag.db)
@@ -67,8 +74,9 @@ record(calcout, "$(P):$(R):WayA_state_calc") {
     field(SCAN,"1 second")
     field(INPA, "$(P):$(R):WayA_State")
     field(INPB, "$(P):$(R):WayA_AlarmSummary")
-    field(CALC, "B=1?4:(A=1?2:(A=2||A=4?1:(A=16?4:5)))")
-    field(OUT, "$(P):$(R):WAYA:STATE_RB PP")
+    field(INPC, "$(P):$(R):WayA_State.SEVR NPP NMS")
+    field(CALC, "C>=3?5:(B=1?4:(A=1?2:(A=2||A=4?1:(A=16?4:3))))")
+    field(OUT, "$(P):$(R):WAYA:STATE_BASE PP")
     field(OOPT, "Every Time")
 }
 
@@ -128,7 +136,7 @@ record(calcout, "$(P):$(R):WAYB:start_ramp") {
 
 record(mbbi, "$(P):$(R):WAYB:STATE_RB") {
     field(DESC, "State readback")
-    field(SCAN,"Passive")
+    field(SCAN, "Passive")
     field(ZRVL, "0")
     field(ZRST, "OFF")
     field(ONVL, "1")
@@ -136,13 +144,20 @@ record(mbbi, "$(P):$(R):WAYB:STATE_RB") {
     field(TWVL, "2")
     field(TWST, "STANDBY")
     field(THVL, "3")
-    field(THST, "RESET")
+    field(THST, "FAULT")
+    field(THSV, "MAJOR")
     field(FRVL, "4")
-    field(FRST, "INTERLOCK")
-    field(FRSV, "MAJOR") 
+    field(FRST, "EXT_INTLK")
+    field(FRSV, "MAJOR")
     field(FVVL, "5")
-    field(FVST, "ERROR")
+    field(FVST, "CONN_FAULT")
     field(FVSV, "MAJOR")
+    field(SXVL, "6")
+    field(SXST, "SP_NOT_REACHED")
+    field(SXSV, "MINOR")
+    field(SVVL, "7")
+    field(SVST, "ST_NOT_REACHED")
+    field(SVSV, "MAJOR")
 }
 
 # State calculation (same logic as unimag.db)
@@ -151,8 +166,9 @@ record(calcout, "$(P):$(R):WayB_state_calc") {
     field(SCAN,"1 second")
     field(INPA, "$(P):$(R):WayB_State")
     field(INPB, "$(P):$(R):WayB_AlarmSummary")
-    field(CALC, "B=1?4:(A=1?2:(A=2||A=4?1:(A=16?4:5)))")
-    field(OUT, "$(P):$(R):WAYB:STATE_RB PP")
+    field(INPC, "$(P):$(R):WayB_State.SEVR NPP NMS")
+    field(CALC, "C>=3?5:(B=1?4:(A=1?2:(A=2||A=4?1:(A=16?4:3))))")
+    field(OUT, "$(P):$(R):WAYB:STATE_BASE PP")
     field(OOPT, "Every Time")
 }
 
@@ -212,7 +228,7 @@ record(calcout, "$(P):$(R):WAYC:start_ramp") {
 
 record(mbbi, "$(P):$(R):WAYC:STATE_RB") {
     field(DESC, "State readback")
-    field(SCAN,"Passive")
+    field(SCAN, "Passive")
     field(ZRVL, "0")
     field(ZRST, "OFF")
     field(ONVL, "1")
@@ -220,13 +236,20 @@ record(mbbi, "$(P):$(R):WAYC:STATE_RB") {
     field(TWVL, "2")
     field(TWST, "STANDBY")
     field(THVL, "3")
-    field(THST, "RESET")
+    field(THST, "FAULT")
+    field(THSV, "MAJOR")
     field(FRVL, "4")
-    field(FRST, "INTERLOCK")
-    field(FRSV, "MAJOR") 
+    field(FRST, "EXT_INTLK")
+    field(FRSV, "MAJOR")
     field(FVVL, "5")
-    field(FVST, "ERROR")
+    field(FVST, "CONN_FAULT")
     field(FVSV, "MAJOR")
+    field(SXVL, "6")
+    field(SXST, "SP_NOT_REACHED")
+    field(SXSV, "MINOR")
+    field(SVVL, "7")
+    field(SVST, "ST_NOT_REACHED")
+    field(SVSV, "MAJOR")
 }
 
 # State calculation (same logic as unimag.db)
@@ -235,8 +258,9 @@ record(calcout, "$(P):$(R):WayC_state_calc") {
     field(SCAN,"1 second")
     field(INPA, "$(P):$(R):WayC_State")
     field(INPB, "$(P):$(R):WayC_AlarmSummary")
-    field(CALC, "B=1?4:(A=1?2:(A=2||A=4?1:(A=16?4:5)))")
-    field(OUT, "$(P):$(R):WAYC:STATE_RB PP")
+    field(INPC, "$(P):$(R):WayC_State.SEVR NPP NMS")
+    field(CALC, "C>=3?5:(B=1?4:(A=1?2:(A=2||A=4?1:(A=16?4:3))))")
+    field(OUT, "$(P):$(R):WAYC:STATE_BASE PP")
     field(OOPT, "Every Time")
 }
 
@@ -295,7 +319,7 @@ record(calcout, "$(P):$(R):WAYD:start_ramp") {
 
 record(mbbi, "$(P):$(R):WAYD:STATE_RB") {
     field(DESC, "State readback")
-    field(SCAN,"Passive")
+    field(SCAN, "Passive")
     field(ZRVL, "0")
     field(ZRST, "OFF")
     field(ONVL, "1")
@@ -303,13 +327,20 @@ record(mbbi, "$(P):$(R):WAYD:STATE_RB") {
     field(TWVL, "2")
     field(TWST, "STANDBY")
     field(THVL, "3")
-    field(THST, "RESET")
+    field(THST, "FAULT")
+    field(THSV, "MAJOR")
     field(FRVL, "4")
-    field(FRST, "INTERLOCK")
-    field(FRSV, "MAJOR") 
+    field(FRST, "EXT_INTLK")
+    field(FRSV, "MAJOR")
     field(FVVL, "5")
-    field(FVST, "ERROR")
+    field(FVST, "CONN_FAULT")
     field(FVSV, "MAJOR")
+    field(SXVL, "6")
+    field(SXST, "SP_NOT_REACHED")
+    field(SXSV, "MINOR")
+    field(SVVL, "7")
+    field(SVST, "ST_NOT_REACHED")
+    field(SVSV, "MAJOR")
 }
 
 # State calculation (same logic as unimag.db)
@@ -318,8 +349,9 @@ record(calcout, "$(P):$(R):WayD_state_calc") {
     field(SCAN,"1 second")
     field(INPA, "$(P):$(R):WayD_State")
     field(INPB, "$(P):$(R):WayD_AlarmSummary")
-    field(CALC, "B=1?4:(A=1?2:(A=2||A=4?1:(A=16?4:5)))")
-    field(OUT, "$(P):$(R):WAYD:STATE_RB PP")
+    field(INPC, "$(P):$(R):WayD_State.SEVR NPP NMS")
+    field(CALC, "C>=3?5:(B=1?4:(A=1?2:(A=2||A=4?1:(A=16?4:3))))")
+    field(OUT, "$(P):$(R):WAYD:STATE_BASE PP")
     field(OOPT, "Every Time")
 }
 
@@ -347,4 +379,664 @@ record(calcout, "$(P):$(R):WayD_state_to_enable") {
     field(CALC, "A=1?1:(A=3?8:2)")
     field(OUT, "$(P):$(R):WayD_StateControl PP")
     field(OOPT, "Every Time")
+}
+
+# =================================================
+# UNIMAG aligned states and watchdogs
+# =================================================
+# STATE_RB (aligned across the UNIMAG power-supply IOCs):
+#   0 OFF | 1 ON | 2 STANDBY | 3 FAULT (MAJOR) | 4 EXT_INTLK (MAJOR)
+#   5 CONN_FAULT (MAJOR, communication errors)
+#   6 SP_NOT_REACHED (MINOR, current setpoint not reached)
+#   7 ST_NOT_REACHED (MAJOR, commanded state not reached)
+#   8.. additional, device specific states
+#
+# The device logic decodes the plain state (0-5 and the device specific
+# ones) into STATE_BASE. The watchdogs below add 6 and 7 on top of it, and
+# STATE_FINAL selects what STATE_RB shows: faults win, then ST_NOT_REACHED,
+# then SP_NOT_REACHED.
+#
+# Configuration (db macros, also live PVs):
+#   SET_TOLERANCE  (A) readback within this of CURRENT_SP counts as reached
+#                      (default 1.0, 0 disables the setpoint check)
+#   ZERO_TOLERANCE (A) a zero setpoint counts as reached within this
+#                      (default 0.5)
+#   SET_TIMEOUT_S  (s) how long the setpoint / state may stay unreached
+#                      without progress before it is reported (default 30)
+# The timeout restarts on progress (readback getting closer to the setpoint),
+# on a new setpoint and on a new state command.
+
+record(ao, "$(P):$(R):WAYA:SET_TOLERANCE") {
+    field(DESC, "Current setpoint tolerance")
+    field(EGU,  "A")
+    field(PREC, "3")
+    field(VAL,  "$(SET_TOLERANCE=1.0)")
+    field(PINI, "YES")
+    field(DRVL, "0")
+    field(DRVH, "1000")
+}
+
+record(ao, "$(P):$(R):WAYA:ZERO_TOLERANCE") {
+    field(DESC, "Zero current tolerance")
+    field(EGU,  "A")
+    field(PREC, "3")
+    field(VAL,  "$(ZERO_TOLERANCE=0.5)")
+    field(PINI, "YES")
+    field(DRVL, "0")
+    field(DRVH, "1000")
+}
+
+record(ao, "$(P):$(R):WAYA:SET_TIMEOUT_S") {
+    field(DESC, "Setpoint/state timeout")
+    field(EGU,  "s")
+    field(PREC, "1")
+    field(VAL,  "$(SET_TIMEOUT_S=30)")
+    field(PINI, "YES")
+    field(DRVL, "1")
+    field(DRVH, "3600")
+}
+
+# Plain decoded state (0-5 and device specific), written by the device logic
+record(ao, "$(P):$(R):WAYA:STATE_BASE") {
+    field(DESC, "Decoded state without 6/7")
+    field(FLNK, "$(P):$(R):WAYA:STATE_FINAL")
+}
+
+# Final state: faults win, then ST_NOT_REACHED, then SP_NOT_REACHED
+record(calcout, "$(P):$(R):WAYA:STATE_FINAL") {
+    field(DESC, "Final state incl. NOT_REACHED")
+    field(INPA, "$(P):$(R):WAYA:STATE_BASE NPP NMS")
+    field(INPB, "$(P):$(R):WAYA:ST_NOT_REACHED NPP NMS")
+    field(INPC, "$(P):$(R):WAYA:SP_NOT_REACHED NPP NMS")
+    field(CALC, "(A>=3&&A<=5)?A:(B?7:(C?6:A))")
+    field(OUT,  "$(P):$(R):WAYA:STATE_RB PP")
+    field(OOPT, "Every Time")
+}
+
+# ---------- setpoint watchdog ----------
+# Distance of the readback from the setpoint (from zero for a zero setpoint)
+record(calc, "$(P):$(R):WAYA:SP_ERR") {
+    field(DESC, "Setpoint error")
+    field(INPA, "$(P):$(R):WAYA:CURRENT_RB NPP NMS")
+    field(INPB, "$(P):$(R):WAYA:CURRENT_SP NPP NMS")
+    field(INPC, "$(P):$(R):WAYA:ZERO_TOLERANCE NPP NMS")
+    field(CALC, "ABS(B)<=C?ABS(A):ABS(A-B)")
+    field(EGU,  "A")
+    field(PREC, "3")
+}
+
+# Seconds the setpoint has been unreached without progress. Only counts
+# while the supply is ON (or in a device specific active state).
+record(calc, "$(P):$(R):WAYA:SP_WDOG") {
+    field(DESC, "Setpoint unreached seconds")
+    field(SCAN, "1 second")
+    field(INPA, "$(P):$(R):WAYA:SP_ERR PP NMS")
+    field(INPB, "$(P):$(R):WAYA:SP_WDOG NPP NMS")
+    field(INPC, "$(P):$(R):WAYA:ERR_LAST NPP NMS")
+    field(INPD, "$(P):$(R):WAYA:SET_TOLERANCE NPP NMS")
+    field(INPE, "$(P):$(R):WAYA:ZERO_TOLERANCE NPP NMS")
+    field(INPF, "$(P):$(R):WAYA:CURRENT_SP NPP NMS")
+    field(INPG, "$(P):$(R):WAYA:SP_LAST NPP NMS")
+    field(INPH, "$(P):$(R):WAYA:STATE_BASE NPP NMS")
+    field(CALC, "D<=0||H!=1&&H<8?0:(A<=(ABS(F)<=E?E:D)?0:(F!=G||A<C-D/20?0:B+1))")
+    field(FLNK, "$(P):$(R):WAYA:SP_NOT_REACHED")
+}
+
+record(calc, "$(P):$(R):WAYA:SP_NOT_REACHED") {
+    field(DESC, "Setpoint not reached in time")
+    field(INPA, "$(P):$(R):WAYA:SP_WDOG NPP NMS")
+    field(INPB, "$(P):$(R):WAYA:SET_TIMEOUT_S NPP NMS")
+    field(CALC, "A>=B")
+    field(FLNK, "$(P):$(R):WAYA:SP_LAST")
+}
+
+record(calc, "$(P):$(R):WAYA:SP_LAST") {
+    field(DESC, "Previous setpoint")
+    field(INPA, "$(P):$(R):WAYA:CURRENT_SP NPP NMS")
+    field(CALC, "A")
+    field(PINI, "YES")
+    field(FLNK, "$(P):$(R):WAYA:ERR_LAST")
+}
+
+record(calc, "$(P):$(R):WAYA:ERR_LAST") {
+    field(DESC, "Previous setpoint error")
+    field(INPA, "$(P):$(R):WAYA:SP_ERR NPP NMS")
+    field(CALC, "A")
+    field(FLNK, "$(P):$(R):WAYA:STATE_FINAL")
+}
+
+# ---------- state watchdog ----------
+# Armed by the first state command after boot, so that a supply left running
+# does not raise ST_NOT_REACHED just because STATE_SP boots as OFF.
+record(calc, "$(P):$(R):WAYA:ST_ARMED") {
+    field(DESC, "State command seen since boot")
+    field(INPA, "$(P):$(R):WAYA:STATE_SP NPP NMS")
+    field(INPB, "$(P):$(R):WAYA:ST_LAST NPP NMS")
+    field(INPC, "$(P):$(R):WAYA:ST_ARMED NPP NMS")
+    field(CALC, "C||A!=B")
+}
+
+# Seconds the commanded state has not been reached. Faults do not count
+# (they are shown as such); OFF and STANDBY are both accepted for either.
+record(calc, "$(P):$(R):WAYA:ST_WDOG") {
+    field(DESC, "State unreached seconds")
+    field(SCAN, "1 second")
+    field(INPA, "$(P):$(R):WAYA:STATE_SP NPP NMS")
+    field(INPB, "$(P):$(R):WAYA:ST_LAST NPP NMS")
+    field(INPC, "$(P):$(R):WAYA:STATE_BASE NPP NMS")
+    field(INPD, "$(P):$(R):WAYA:ST_WDOG NPP NMS")
+    field(INPE, "$(P):$(R):WAYA:ST_ARMED PP NMS")
+    field(CALC, "!E||C>=3&&C<=5||A!=B||(A=1?C=1:(A=0||A=2?C=0||C=2:1))?0:D+1")
+    field(FLNK, "$(P):$(R):WAYA:ST_NOT_REACHED")
+}
+
+record(calc, "$(P):$(R):WAYA:ST_NOT_REACHED") {
+    field(DESC, "State not reached in time")
+    field(INPA, "$(P):$(R):WAYA:ST_WDOG NPP NMS")
+    field(INPB, "$(P):$(R):WAYA:SET_TIMEOUT_S NPP NMS")
+    field(CALC, "A>=B")
+    field(FLNK, "$(P):$(R):WAYA:ST_LAST")
+}
+
+record(calc, "$(P):$(R):WAYA:ST_LAST") {
+    field(DESC, "Previous state command")
+    field(INPA, "$(P):$(R):WAYA:STATE_SP NPP NMS")
+    field(CALC, "A")
+    field(PINI, "YES")
+    field(FLNK, "$(P):$(R):WAYA:STATE_FINAL")
+}
+
+# =================================================
+# UNIMAG aligned states and watchdogs
+# =================================================
+# STATE_RB (aligned across the UNIMAG power-supply IOCs):
+#   0 OFF | 1 ON | 2 STANDBY | 3 FAULT (MAJOR) | 4 EXT_INTLK (MAJOR)
+#   5 CONN_FAULT (MAJOR, communication errors)
+#   6 SP_NOT_REACHED (MINOR, current setpoint not reached)
+#   7 ST_NOT_REACHED (MAJOR, commanded state not reached)
+#   8.. additional, device specific states
+#
+# The device logic decodes the plain state (0-5 and the device specific
+# ones) into STATE_BASE. The watchdogs below add 6 and 7 on top of it, and
+# STATE_FINAL selects what STATE_RB shows: faults win, then ST_NOT_REACHED,
+# then SP_NOT_REACHED.
+#
+# Configuration (db macros, also live PVs):
+#   SET_TOLERANCE  (A) readback within this of CURRENT_SP counts as reached
+#                      (default 1.0, 0 disables the setpoint check)
+#   ZERO_TOLERANCE (A) a zero setpoint counts as reached within this
+#                      (default 0.5)
+#   SET_TIMEOUT_S  (s) how long the setpoint / state may stay unreached
+#                      without progress before it is reported (default 30)
+# The timeout restarts on progress (readback getting closer to the setpoint),
+# on a new setpoint and on a new state command.
+
+record(ao, "$(P):$(R):WAYB:SET_TOLERANCE") {
+    field(DESC, "Current setpoint tolerance")
+    field(EGU,  "A")
+    field(PREC, "3")
+    field(VAL,  "$(SET_TOLERANCE=1.0)")
+    field(PINI, "YES")
+    field(DRVL, "0")
+    field(DRVH, "1000")
+}
+
+record(ao, "$(P):$(R):WAYB:ZERO_TOLERANCE") {
+    field(DESC, "Zero current tolerance")
+    field(EGU,  "A")
+    field(PREC, "3")
+    field(VAL,  "$(ZERO_TOLERANCE=0.5)")
+    field(PINI, "YES")
+    field(DRVL, "0")
+    field(DRVH, "1000")
+}
+
+record(ao, "$(P):$(R):WAYB:SET_TIMEOUT_S") {
+    field(DESC, "Setpoint/state timeout")
+    field(EGU,  "s")
+    field(PREC, "1")
+    field(VAL,  "$(SET_TIMEOUT_S=30)")
+    field(PINI, "YES")
+    field(DRVL, "1")
+    field(DRVH, "3600")
+}
+
+# Plain decoded state (0-5 and device specific), written by the device logic
+record(ao, "$(P):$(R):WAYB:STATE_BASE") {
+    field(DESC, "Decoded state without 6/7")
+    field(FLNK, "$(P):$(R):WAYB:STATE_FINAL")
+}
+
+# Final state: faults win, then ST_NOT_REACHED, then SP_NOT_REACHED
+record(calcout, "$(P):$(R):WAYB:STATE_FINAL") {
+    field(DESC, "Final state incl. NOT_REACHED")
+    field(INPA, "$(P):$(R):WAYB:STATE_BASE NPP NMS")
+    field(INPB, "$(P):$(R):WAYB:ST_NOT_REACHED NPP NMS")
+    field(INPC, "$(P):$(R):WAYB:SP_NOT_REACHED NPP NMS")
+    field(CALC, "(A>=3&&A<=5)?A:(B?7:(C?6:A))")
+    field(OUT,  "$(P):$(R):WAYB:STATE_RB PP")
+    field(OOPT, "Every Time")
+}
+
+# ---------- setpoint watchdog ----------
+# Distance of the readback from the setpoint (from zero for a zero setpoint)
+record(calc, "$(P):$(R):WAYB:SP_ERR") {
+    field(DESC, "Setpoint error")
+    field(INPA, "$(P):$(R):WAYB:CURRENT_RB NPP NMS")
+    field(INPB, "$(P):$(R):WAYB:CURRENT_SP NPP NMS")
+    field(INPC, "$(P):$(R):WAYB:ZERO_TOLERANCE NPP NMS")
+    field(CALC, "ABS(B)<=C?ABS(A):ABS(A-B)")
+    field(EGU,  "A")
+    field(PREC, "3")
+}
+
+# Seconds the setpoint has been unreached without progress. Only counts
+# while the supply is ON (or in a device specific active state).
+record(calc, "$(P):$(R):WAYB:SP_WDOG") {
+    field(DESC, "Setpoint unreached seconds")
+    field(SCAN, "1 second")
+    field(INPA, "$(P):$(R):WAYB:SP_ERR PP NMS")
+    field(INPB, "$(P):$(R):WAYB:SP_WDOG NPP NMS")
+    field(INPC, "$(P):$(R):WAYB:ERR_LAST NPP NMS")
+    field(INPD, "$(P):$(R):WAYB:SET_TOLERANCE NPP NMS")
+    field(INPE, "$(P):$(R):WAYB:ZERO_TOLERANCE NPP NMS")
+    field(INPF, "$(P):$(R):WAYB:CURRENT_SP NPP NMS")
+    field(INPG, "$(P):$(R):WAYB:SP_LAST NPP NMS")
+    field(INPH, "$(P):$(R):WAYB:STATE_BASE NPP NMS")
+    field(CALC, "D<=0||H!=1&&H<8?0:(A<=(ABS(F)<=E?E:D)?0:(F!=G||A<C-D/20?0:B+1))")
+    field(FLNK, "$(P):$(R):WAYB:SP_NOT_REACHED")
+}
+
+record(calc, "$(P):$(R):WAYB:SP_NOT_REACHED") {
+    field(DESC, "Setpoint not reached in time")
+    field(INPA, "$(P):$(R):WAYB:SP_WDOG NPP NMS")
+    field(INPB, "$(P):$(R):WAYB:SET_TIMEOUT_S NPP NMS")
+    field(CALC, "A>=B")
+    field(FLNK, "$(P):$(R):WAYB:SP_LAST")
+}
+
+record(calc, "$(P):$(R):WAYB:SP_LAST") {
+    field(DESC, "Previous setpoint")
+    field(INPA, "$(P):$(R):WAYB:CURRENT_SP NPP NMS")
+    field(CALC, "A")
+    field(PINI, "YES")
+    field(FLNK, "$(P):$(R):WAYB:ERR_LAST")
+}
+
+record(calc, "$(P):$(R):WAYB:ERR_LAST") {
+    field(DESC, "Previous setpoint error")
+    field(INPA, "$(P):$(R):WAYB:SP_ERR NPP NMS")
+    field(CALC, "A")
+    field(FLNK, "$(P):$(R):WAYB:STATE_FINAL")
+}
+
+# ---------- state watchdog ----------
+# Armed by the first state command after boot, so that a supply left running
+# does not raise ST_NOT_REACHED just because STATE_SP boots as OFF.
+record(calc, "$(P):$(R):WAYB:ST_ARMED") {
+    field(DESC, "State command seen since boot")
+    field(INPA, "$(P):$(R):WAYB:STATE_SP NPP NMS")
+    field(INPB, "$(P):$(R):WAYB:ST_LAST NPP NMS")
+    field(INPC, "$(P):$(R):WAYB:ST_ARMED NPP NMS")
+    field(CALC, "C||A!=B")
+}
+
+# Seconds the commanded state has not been reached. Faults do not count
+# (they are shown as such); OFF and STANDBY are both accepted for either.
+record(calc, "$(P):$(R):WAYB:ST_WDOG") {
+    field(DESC, "State unreached seconds")
+    field(SCAN, "1 second")
+    field(INPA, "$(P):$(R):WAYB:STATE_SP NPP NMS")
+    field(INPB, "$(P):$(R):WAYB:ST_LAST NPP NMS")
+    field(INPC, "$(P):$(R):WAYB:STATE_BASE NPP NMS")
+    field(INPD, "$(P):$(R):WAYB:ST_WDOG NPP NMS")
+    field(INPE, "$(P):$(R):WAYB:ST_ARMED PP NMS")
+    field(CALC, "!E||C>=3&&C<=5||A!=B||(A=1?C=1:(A=0||A=2?C=0||C=2:1))?0:D+1")
+    field(FLNK, "$(P):$(R):WAYB:ST_NOT_REACHED")
+}
+
+record(calc, "$(P):$(R):WAYB:ST_NOT_REACHED") {
+    field(DESC, "State not reached in time")
+    field(INPA, "$(P):$(R):WAYB:ST_WDOG NPP NMS")
+    field(INPB, "$(P):$(R):WAYB:SET_TIMEOUT_S NPP NMS")
+    field(CALC, "A>=B")
+    field(FLNK, "$(P):$(R):WAYB:ST_LAST")
+}
+
+record(calc, "$(P):$(R):WAYB:ST_LAST") {
+    field(DESC, "Previous state command")
+    field(INPA, "$(P):$(R):WAYB:STATE_SP NPP NMS")
+    field(CALC, "A")
+    field(PINI, "YES")
+    field(FLNK, "$(P):$(R):WAYB:STATE_FINAL")
+}
+
+# =================================================
+# UNIMAG aligned states and watchdogs
+# =================================================
+# STATE_RB (aligned across the UNIMAG power-supply IOCs):
+#   0 OFF | 1 ON | 2 STANDBY | 3 FAULT (MAJOR) | 4 EXT_INTLK (MAJOR)
+#   5 CONN_FAULT (MAJOR, communication errors)
+#   6 SP_NOT_REACHED (MINOR, current setpoint not reached)
+#   7 ST_NOT_REACHED (MAJOR, commanded state not reached)
+#   8.. additional, device specific states
+#
+# The device logic decodes the plain state (0-5 and the device specific
+# ones) into STATE_BASE. The watchdogs below add 6 and 7 on top of it, and
+# STATE_FINAL selects what STATE_RB shows: faults win, then ST_NOT_REACHED,
+# then SP_NOT_REACHED.
+#
+# Configuration (db macros, also live PVs):
+#   SET_TOLERANCE  (A) readback within this of CURRENT_SP counts as reached
+#                      (default 1.0, 0 disables the setpoint check)
+#   ZERO_TOLERANCE (A) a zero setpoint counts as reached within this
+#                      (default 0.5)
+#   SET_TIMEOUT_S  (s) how long the setpoint / state may stay unreached
+#                      without progress before it is reported (default 30)
+# The timeout restarts on progress (readback getting closer to the setpoint),
+# on a new setpoint and on a new state command.
+
+record(ao, "$(P):$(R):WAYC:SET_TOLERANCE") {
+    field(DESC, "Current setpoint tolerance")
+    field(EGU,  "A")
+    field(PREC, "3")
+    field(VAL,  "$(SET_TOLERANCE=1.0)")
+    field(PINI, "YES")
+    field(DRVL, "0")
+    field(DRVH, "1000")
+}
+
+record(ao, "$(P):$(R):WAYC:ZERO_TOLERANCE") {
+    field(DESC, "Zero current tolerance")
+    field(EGU,  "A")
+    field(PREC, "3")
+    field(VAL,  "$(ZERO_TOLERANCE=0.5)")
+    field(PINI, "YES")
+    field(DRVL, "0")
+    field(DRVH, "1000")
+}
+
+record(ao, "$(P):$(R):WAYC:SET_TIMEOUT_S") {
+    field(DESC, "Setpoint/state timeout")
+    field(EGU,  "s")
+    field(PREC, "1")
+    field(VAL,  "$(SET_TIMEOUT_S=30)")
+    field(PINI, "YES")
+    field(DRVL, "1")
+    field(DRVH, "3600")
+}
+
+# Plain decoded state (0-5 and device specific), written by the device logic
+record(ao, "$(P):$(R):WAYC:STATE_BASE") {
+    field(DESC, "Decoded state without 6/7")
+    field(FLNK, "$(P):$(R):WAYC:STATE_FINAL")
+}
+
+# Final state: faults win, then ST_NOT_REACHED, then SP_NOT_REACHED
+record(calcout, "$(P):$(R):WAYC:STATE_FINAL") {
+    field(DESC, "Final state incl. NOT_REACHED")
+    field(INPA, "$(P):$(R):WAYC:STATE_BASE NPP NMS")
+    field(INPB, "$(P):$(R):WAYC:ST_NOT_REACHED NPP NMS")
+    field(INPC, "$(P):$(R):WAYC:SP_NOT_REACHED NPP NMS")
+    field(CALC, "(A>=3&&A<=5)?A:(B?7:(C?6:A))")
+    field(OUT,  "$(P):$(R):WAYC:STATE_RB PP")
+    field(OOPT, "Every Time")
+}
+
+# ---------- setpoint watchdog ----------
+# Distance of the readback from the setpoint (from zero for a zero setpoint)
+record(calc, "$(P):$(R):WAYC:SP_ERR") {
+    field(DESC, "Setpoint error")
+    field(INPA, "$(P):$(R):WAYC:CURRENT_RB NPP NMS")
+    field(INPB, "$(P):$(R):WAYC:CURRENT_SP NPP NMS")
+    field(INPC, "$(P):$(R):WAYC:ZERO_TOLERANCE NPP NMS")
+    field(CALC, "ABS(B)<=C?ABS(A):ABS(A-B)")
+    field(EGU,  "A")
+    field(PREC, "3")
+}
+
+# Seconds the setpoint has been unreached without progress. Only counts
+# while the supply is ON (or in a device specific active state).
+record(calc, "$(P):$(R):WAYC:SP_WDOG") {
+    field(DESC, "Setpoint unreached seconds")
+    field(SCAN, "1 second")
+    field(INPA, "$(P):$(R):WAYC:SP_ERR PP NMS")
+    field(INPB, "$(P):$(R):WAYC:SP_WDOG NPP NMS")
+    field(INPC, "$(P):$(R):WAYC:ERR_LAST NPP NMS")
+    field(INPD, "$(P):$(R):WAYC:SET_TOLERANCE NPP NMS")
+    field(INPE, "$(P):$(R):WAYC:ZERO_TOLERANCE NPP NMS")
+    field(INPF, "$(P):$(R):WAYC:CURRENT_SP NPP NMS")
+    field(INPG, "$(P):$(R):WAYC:SP_LAST NPP NMS")
+    field(INPH, "$(P):$(R):WAYC:STATE_BASE NPP NMS")
+    field(CALC, "D<=0||H!=1&&H<8?0:(A<=(ABS(F)<=E?E:D)?0:(F!=G||A<C-D/20?0:B+1))")
+    field(FLNK, "$(P):$(R):WAYC:SP_NOT_REACHED")
+}
+
+record(calc, "$(P):$(R):WAYC:SP_NOT_REACHED") {
+    field(DESC, "Setpoint not reached in time")
+    field(INPA, "$(P):$(R):WAYC:SP_WDOG NPP NMS")
+    field(INPB, "$(P):$(R):WAYC:SET_TIMEOUT_S NPP NMS")
+    field(CALC, "A>=B")
+    field(FLNK, "$(P):$(R):WAYC:SP_LAST")
+}
+
+record(calc, "$(P):$(R):WAYC:SP_LAST") {
+    field(DESC, "Previous setpoint")
+    field(INPA, "$(P):$(R):WAYC:CURRENT_SP NPP NMS")
+    field(CALC, "A")
+    field(PINI, "YES")
+    field(FLNK, "$(P):$(R):WAYC:ERR_LAST")
+}
+
+record(calc, "$(P):$(R):WAYC:ERR_LAST") {
+    field(DESC, "Previous setpoint error")
+    field(INPA, "$(P):$(R):WAYC:SP_ERR NPP NMS")
+    field(CALC, "A")
+    field(FLNK, "$(P):$(R):WAYC:STATE_FINAL")
+}
+
+# ---------- state watchdog ----------
+# Armed by the first state command after boot, so that a supply left running
+# does not raise ST_NOT_REACHED just because STATE_SP boots as OFF.
+record(calc, "$(P):$(R):WAYC:ST_ARMED") {
+    field(DESC, "State command seen since boot")
+    field(INPA, "$(P):$(R):WAYC:STATE_SP NPP NMS")
+    field(INPB, "$(P):$(R):WAYC:ST_LAST NPP NMS")
+    field(INPC, "$(P):$(R):WAYC:ST_ARMED NPP NMS")
+    field(CALC, "C||A!=B")
+}
+
+# Seconds the commanded state has not been reached. Faults do not count
+# (they are shown as such); OFF and STANDBY are both accepted for either.
+record(calc, "$(P):$(R):WAYC:ST_WDOG") {
+    field(DESC, "State unreached seconds")
+    field(SCAN, "1 second")
+    field(INPA, "$(P):$(R):WAYC:STATE_SP NPP NMS")
+    field(INPB, "$(P):$(R):WAYC:ST_LAST NPP NMS")
+    field(INPC, "$(P):$(R):WAYC:STATE_BASE NPP NMS")
+    field(INPD, "$(P):$(R):WAYC:ST_WDOG NPP NMS")
+    field(INPE, "$(P):$(R):WAYC:ST_ARMED PP NMS")
+    field(CALC, "!E||C>=3&&C<=5||A!=B||(A=1?C=1:(A=0||A=2?C=0||C=2:1))?0:D+1")
+    field(FLNK, "$(P):$(R):WAYC:ST_NOT_REACHED")
+}
+
+record(calc, "$(P):$(R):WAYC:ST_NOT_REACHED") {
+    field(DESC, "State not reached in time")
+    field(INPA, "$(P):$(R):WAYC:ST_WDOG NPP NMS")
+    field(INPB, "$(P):$(R):WAYC:SET_TIMEOUT_S NPP NMS")
+    field(CALC, "A>=B")
+    field(FLNK, "$(P):$(R):WAYC:ST_LAST")
+}
+
+record(calc, "$(P):$(R):WAYC:ST_LAST") {
+    field(DESC, "Previous state command")
+    field(INPA, "$(P):$(R):WAYC:STATE_SP NPP NMS")
+    field(CALC, "A")
+    field(PINI, "YES")
+    field(FLNK, "$(P):$(R):WAYC:STATE_FINAL")
+}
+
+# =================================================
+# UNIMAG aligned states and watchdogs
+# =================================================
+# STATE_RB (aligned across the UNIMAG power-supply IOCs):
+#   0 OFF | 1 ON | 2 STANDBY | 3 FAULT (MAJOR) | 4 EXT_INTLK (MAJOR)
+#   5 CONN_FAULT (MAJOR, communication errors)
+#   6 SP_NOT_REACHED (MINOR, current setpoint not reached)
+#   7 ST_NOT_REACHED (MAJOR, commanded state not reached)
+#   8.. additional, device specific states
+#
+# The device logic decodes the plain state (0-5 and the device specific
+# ones) into STATE_BASE. The watchdogs below add 6 and 7 on top of it, and
+# STATE_FINAL selects what STATE_RB shows: faults win, then ST_NOT_REACHED,
+# then SP_NOT_REACHED.
+#
+# Configuration (db macros, also live PVs):
+#   SET_TOLERANCE  (A) readback within this of CURRENT_SP counts as reached
+#                      (default 1.0, 0 disables the setpoint check)
+#   ZERO_TOLERANCE (A) a zero setpoint counts as reached within this
+#                      (default 0.5)
+#   SET_TIMEOUT_S  (s) how long the setpoint / state may stay unreached
+#                      without progress before it is reported (default 30)
+# The timeout restarts on progress (readback getting closer to the setpoint),
+# on a new setpoint and on a new state command.
+
+record(ao, "$(P):$(R):WAYD:SET_TOLERANCE") {
+    field(DESC, "Current setpoint tolerance")
+    field(EGU,  "A")
+    field(PREC, "3")
+    field(VAL,  "$(SET_TOLERANCE=1.0)")
+    field(PINI, "YES")
+    field(DRVL, "0")
+    field(DRVH, "1000")
+}
+
+record(ao, "$(P):$(R):WAYD:ZERO_TOLERANCE") {
+    field(DESC, "Zero current tolerance")
+    field(EGU,  "A")
+    field(PREC, "3")
+    field(VAL,  "$(ZERO_TOLERANCE=0.5)")
+    field(PINI, "YES")
+    field(DRVL, "0")
+    field(DRVH, "1000")
+}
+
+record(ao, "$(P):$(R):WAYD:SET_TIMEOUT_S") {
+    field(DESC, "Setpoint/state timeout")
+    field(EGU,  "s")
+    field(PREC, "1")
+    field(VAL,  "$(SET_TIMEOUT_S=30)")
+    field(PINI, "YES")
+    field(DRVL, "1")
+    field(DRVH, "3600")
+}
+
+# Plain decoded state (0-5 and device specific), written by the device logic
+record(ao, "$(P):$(R):WAYD:STATE_BASE") {
+    field(DESC, "Decoded state without 6/7")
+    field(FLNK, "$(P):$(R):WAYD:STATE_FINAL")
+}
+
+# Final state: faults win, then ST_NOT_REACHED, then SP_NOT_REACHED
+record(calcout, "$(P):$(R):WAYD:STATE_FINAL") {
+    field(DESC, "Final state incl. NOT_REACHED")
+    field(INPA, "$(P):$(R):WAYD:STATE_BASE NPP NMS")
+    field(INPB, "$(P):$(R):WAYD:ST_NOT_REACHED NPP NMS")
+    field(INPC, "$(P):$(R):WAYD:SP_NOT_REACHED NPP NMS")
+    field(CALC, "(A>=3&&A<=5)?A:(B?7:(C?6:A))")
+    field(OUT,  "$(P):$(R):WAYD:STATE_RB PP")
+    field(OOPT, "Every Time")
+}
+
+# ---------- setpoint watchdog ----------
+# Distance of the readback from the setpoint (from zero for a zero setpoint)
+record(calc, "$(P):$(R):WAYD:SP_ERR") {
+    field(DESC, "Setpoint error")
+    field(INPA, "$(P):$(R):WAYD:CURRENT_RB NPP NMS")
+    field(INPB, "$(P):$(R):WAYD:CURRENT_SP NPP NMS")
+    field(INPC, "$(P):$(R):WAYD:ZERO_TOLERANCE NPP NMS")
+    field(CALC, "ABS(B)<=C?ABS(A):ABS(A-B)")
+    field(EGU,  "A")
+    field(PREC, "3")
+}
+
+# Seconds the setpoint has been unreached without progress. Only counts
+# while the supply is ON (or in a device specific active state).
+record(calc, "$(P):$(R):WAYD:SP_WDOG") {
+    field(DESC, "Setpoint unreached seconds")
+    field(SCAN, "1 second")
+    field(INPA, "$(P):$(R):WAYD:SP_ERR PP NMS")
+    field(INPB, "$(P):$(R):WAYD:SP_WDOG NPP NMS")
+    field(INPC, "$(P):$(R):WAYD:ERR_LAST NPP NMS")
+    field(INPD, "$(P):$(R):WAYD:SET_TOLERANCE NPP NMS")
+    field(INPE, "$(P):$(R):WAYD:ZERO_TOLERANCE NPP NMS")
+    field(INPF, "$(P):$(R):WAYD:CURRENT_SP NPP NMS")
+    field(INPG, "$(P):$(R):WAYD:SP_LAST NPP NMS")
+    field(INPH, "$(P):$(R):WAYD:STATE_BASE NPP NMS")
+    field(CALC, "D<=0||H!=1&&H<8?0:(A<=(ABS(F)<=E?E:D)?0:(F!=G||A<C-D/20?0:B+1))")
+    field(FLNK, "$(P):$(R):WAYD:SP_NOT_REACHED")
+}
+
+record(calc, "$(P):$(R):WAYD:SP_NOT_REACHED") {
+    field(DESC, "Setpoint not reached in time")
+    field(INPA, "$(P):$(R):WAYD:SP_WDOG NPP NMS")
+    field(INPB, "$(P):$(R):WAYD:SET_TIMEOUT_S NPP NMS")
+    field(CALC, "A>=B")
+    field(FLNK, "$(P):$(R):WAYD:SP_LAST")
+}
+
+record(calc, "$(P):$(R):WAYD:SP_LAST") {
+    field(DESC, "Previous setpoint")
+    field(INPA, "$(P):$(R):WAYD:CURRENT_SP NPP NMS")
+    field(CALC, "A")
+    field(PINI, "YES")
+    field(FLNK, "$(P):$(R):WAYD:ERR_LAST")
+}
+
+record(calc, "$(P):$(R):WAYD:ERR_LAST") {
+    field(DESC, "Previous setpoint error")
+    field(INPA, "$(P):$(R):WAYD:SP_ERR NPP NMS")
+    field(CALC, "A")
+    field(FLNK, "$(P):$(R):WAYD:STATE_FINAL")
+}
+
+# ---------- state watchdog ----------
+# Armed by the first state command after boot, so that a supply left running
+# does not raise ST_NOT_REACHED just because STATE_SP boots as OFF.
+record(calc, "$(P):$(R):WAYD:ST_ARMED") {
+    field(DESC, "State command seen since boot")
+    field(INPA, "$(P):$(R):WAYD:STATE_SP NPP NMS")
+    field(INPB, "$(P):$(R):WAYD:ST_LAST NPP NMS")
+    field(INPC, "$(P):$(R):WAYD:ST_ARMED NPP NMS")
+    field(CALC, "C||A!=B")
+}
+
+# Seconds the commanded state has not been reached. Faults do not count
+# (they are shown as such); OFF and STANDBY are both accepted for either.
+record(calc, "$(P):$(R):WAYD:ST_WDOG") {
+    field(DESC, "State unreached seconds")
+    field(SCAN, "1 second")
+    field(INPA, "$(P):$(R):WAYD:STATE_SP NPP NMS")
+    field(INPB, "$(P):$(R):WAYD:ST_LAST NPP NMS")
+    field(INPC, "$(P):$(R):WAYD:STATE_BASE NPP NMS")
+    field(INPD, "$(P):$(R):WAYD:ST_WDOG NPP NMS")
+    field(INPE, "$(P):$(R):WAYD:ST_ARMED PP NMS")
+    field(CALC, "!E||C>=3&&C<=5||A!=B||(A=1?C=1:(A=0||A=2?C=0||C=2:1))?0:D+1")
+    field(FLNK, "$(P):$(R):WAYD:ST_NOT_REACHED")
+}
+
+record(calc, "$(P):$(R):WAYD:ST_NOT_REACHED") {
+    field(DESC, "State not reached in time")
+    field(INPA, "$(P):$(R):WAYD:ST_WDOG NPP NMS")
+    field(INPB, "$(P):$(R):WAYD:SET_TIMEOUT_S NPP NMS")
+    field(CALC, "A>=B")
+    field(FLNK, "$(P):$(R):WAYD:ST_LAST")
+}
+
+record(calc, "$(P):$(R):WAYD:ST_LAST") {
+    field(DESC, "Previous state command")
+    field(INPA, "$(P):$(R):WAYD:STATE_SP NPP NMS")
+    field(CALC, "A")
+    field(PINI, "YES")
+    field(FLNK, "$(P):$(R):WAYD:STATE_FINAL")
 }
