@@ -58,7 +58,17 @@ record(calc, "$(P):$(R):Fault") {
     field(SCAN, "1 second")
     field(INPA, "$(P):$(R):AlarmsFirst NPP NMS")
     field(INPB, "$(P):$(R):AlarmsSecond NPP NMS")
-    field(CALC, "A||B")
+    field(INPC, "$(P):$(R):MASKALARM NPP NMS")
+    field(CALC, "((A&~(C&65535))!=0)||((B&~((C>>16)&65535))!=0)")
+}
+
+# Alarm mask (bit at 1 masks the alarm, bit at 0 no mask)
+#   bits  0-15 -> AlarmsFirst  bits 0-15
+#   bits 16-31 -> AlarmsSecond bits 0-15
+record(longout, "$(P):$(R):MASKALARM") {
+    field(DESC, "Alarm mask (1 = masked)")
+    field(VAL,  "$(MASKALARM=0)")
+    field(PINI, "YES")
 }
 
 

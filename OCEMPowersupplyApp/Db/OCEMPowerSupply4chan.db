@@ -472,6 +472,14 @@ record(calcout, "$(P):$(R):WayD_calc_ramp_raw") {
 
 #alarms
 
+# Global alarm mask (bit at 1 masks the alarm, bit at 0 no mask)
+#   bits 0-15 -> GlobalAlarms bits 0-15 (shared by all the ways)
+record(longout, "$(P):$(R):MASKALARM") {
+    field(DESC, "Global alarm mask (1 = masked)")
+    field(VAL,  "$(MASKALARM=0)")
+    field(PINI, "YES")
+}
+
 record(longin, "$(P):$(R):GlobalAlarms") {
     field(DTYP, "asynUInt32Digital")
     field(INP, "@asynMask($(READ_ALL) 5 0xFFFF 1000)")  
@@ -525,7 +533,18 @@ record(calcout, "$(P):$(R):WayA_AlarmSummary")
     field(INPA, "$(P):$(R):WayA_AlarmsFirst")
     field(INPB, "$(P):$(R):WayA_AlarmsSecond")
     field(INPC, "$(P):$(R):GlobalAlarms")
-    field(CALC, "(A!=0)||(B!=0)||(C!=0)")
+    field(INPD, "$(P):$(R):WAYA:MASKALARM NPP NMS")
+    field(INPE, "$(P):$(R):MASKALARM NPP NMS")
+    field(CALC, "((A&~(D&65535))!=0)||((B&~((D>>16)&65535))!=0)||((C&~(E&65535))!=0)")
+}
+
+# Way A alarm mask (bit at 1 masks the alarm, bit at 0 no mask)
+#   bits  0-15 -> WayA_AlarmsFirst  bits 0-15
+#   bits 16-31 -> WayA_AlarmsSecond bits 0-15
+record(longout, "$(P):$(R):WAYA:MASKALARM") {
+    field(DESC, "WayA alarm mask (1 = masked)")
+    field(VAL,  "$(MASKALARM_A=0)")
+    field(PINI, "YES")
 }
 
 
@@ -536,7 +555,18 @@ record(calcout, "$(P):$(R):WayB_AlarmSummary")
     field(INPA, "$(P):$(R):WayB_AlarmsFirst")
     field(INPB, "$(P):$(R):WayB_AlarmsSecond")
     field(INPC, "$(P):$(R):GlobalAlarms")
-    field(CALC, "(A!=0)||(B!=0)||(C!=0)")
+    field(INPD, "$(P):$(R):WAYB:MASKALARM NPP NMS")
+    field(INPE, "$(P):$(R):MASKALARM NPP NMS")
+    field(CALC, "((A&~(D&65535))!=0)||((B&~((D>>16)&65535))!=0)||((C&~(E&65535))!=0)")
+}
+
+# Way B alarm mask (bit at 1 masks the alarm, bit at 0 no mask)
+#   bits  0-15 -> WayB_AlarmsFirst  bits 0-15
+#   bits 16-31 -> WayB_AlarmsSecond bits 0-15
+record(longout, "$(P):$(R):WAYB:MASKALARM") {
+    field(DESC, "WayB alarm mask (1 = masked)")
+    field(VAL,  "$(MASKALARM_B=0)")
+    field(PINI, "YES")
 }
 
 record(calcout, "$(P):$(R):WayC_AlarmSummary")
@@ -546,7 +576,18 @@ record(calcout, "$(P):$(R):WayC_AlarmSummary")
     field(INPA, "$(P):$(R):WayC_AlarmsFirst")
     field(INPB, "$(P):$(R):WayC_AlarmsSecond")
     field(INPC, "$(P):$(R):GlobalAlarms")
-    field(CALC, "(A!=0)||(B!=0)||(C!=0)")
+    field(INPD, "$(P):$(R):WAYC:MASKALARM NPP NMS")
+    field(INPE, "$(P):$(R):MASKALARM NPP NMS")
+    field(CALC, "((A&~(D&65535))!=0)||((B&~((D>>16)&65535))!=0)||((C&~(E&65535))!=0)")
+}
+
+# Way C alarm mask (bit at 1 masks the alarm, bit at 0 no mask)
+#   bits  0-15 -> WayC_AlarmsFirst  bits 0-15
+#   bits 16-31 -> WayC_AlarmsSecond bits 0-15
+record(longout, "$(P):$(R):WAYC:MASKALARM") {
+    field(DESC, "WayC alarm mask (1 = masked)")
+    field(VAL,  "$(MASKALARM_C=0)")
+    field(PINI, "YES")
 }
 
 record(calcout, "$(P):$(R):WayD_AlarmSummary")
@@ -556,7 +597,18 @@ record(calcout, "$(P):$(R):WayD_AlarmSummary")
     field(INPA, "$(P):$(R):WayD_AlarmsFirst")
     field(INPB, "$(P):$(R):WayD_AlarmsSecond")
     field(INPC, "$(P):$(R):GlobalAlarms")
-    field(CALC, "(A!=0)||(B!=0)||(C!=0)")
+    field(INPD, "$(P):$(R):WAYD:MASKALARM NPP NMS")
+    field(INPE, "$(P):$(R):MASKALARM NPP NMS")
+    field(CALC, "((A&~(D&65535))!=0)||((B&~((D>>16)&65535))!=0)||((C&~(E&65535))!=0)")
+}
+
+# Way D alarm mask (bit at 1 masks the alarm, bit at 0 no mask)
+#   bits  0-15 -> WayD_AlarmsFirst  bits 0-15
+#   bits 16-31 -> WayD_AlarmsSecond bits 0-15
+record(longout, "$(P):$(R):WAYD:MASKALARM") {
+    field(DESC, "WayD alarm mask (1 = masked)")
+    field(VAL,  "$(MASKALARM_D=0)")
+    field(PINI, "YES")
 }
 
 
