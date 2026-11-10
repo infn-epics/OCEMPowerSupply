@@ -153,6 +153,7 @@ caput SPARC:OCEM:TEST:MASKALARM $(( (1<<9) | (1<<(16+2)) ))   # 262656
 | `VOLTAGE_RB` | Voltage readback (alias of `Voltage` / `WayX_Voltage`) |
 | `STATE_SP` | State command: `OFF`, `ON`, `STANDBY`, `RESET` |
 | `STATE_RB` | State readback (see below) |
+| `STATE_SM` | UNIMAG state machine (see below) |
 
 ### States
 
@@ -166,11 +167,10 @@ caput SPARC:OCEM:TEST:MASKALARM $(( (1<<9) | (1<<(16+2)) ))   # 262656
 | 3 | `FAULT` | MAJOR | Power supply fault |
 | 4 | `EXT_INTLK` | MAJOR | External interlock |
 | 5 | `CONN_FAULT` | MAJOR | Communication errors (the status read fails) |
-| 6 | `SP_NOT_REACHED` | MINOR | Current setpoint not reached |
-| 7 | `ST_NOT_REACHED` | MAJOR | State not reached (UNIMAG failure) |
 
-Faults win over `ST_NOT_REACHED`, which wins over `SP_NOT_REACHED`. Values from
-8 up are for additional, device specific states.
+Values from 8 up are for additional, device specific states. A setpoint or state
+not reached is a software state, reported by `STATE_SM` (below) and not by
+`STATE_RB`.
 
 - Single channel (`unimag-ocem.db`): `FAULT` from `Fault` (unmasked
   `AlarmsFirst`/`AlarmsSecond`), `STANDBY` from the standby bit, `CONN_FAULT`
@@ -179,6 +179,23 @@ Faults win over `ST_NOT_REACHED`, which wins over `SP_NOT_REACHED`. Values from
   prefixed `$(P):$(R):WAYX:`. `EXT_INTLK` comes from the way alarm summary
   (unmasked alarms) or from way state 16. An unknown way state gives `FAULT`.
   `CONN_FAULT` is set when `WayX_State` cannot be read.
+
+### UNIMAG state machine (`STATE_SM`)
+
+`STATE_SM` tells what the supply is doing:
+
+| Value | State | Alarm | Meaning |
+|-------|-------|-------|---------|
+| 0 | `READY` | - | Idle, last command done |
+| 1 | `GOTOSET` | - | Readback going to the setpoint (within `SET_TOLERANCE`) |
+| 2 | `GOTOSTATE` | - | Commanded state not reached yet |
+| 3 | `GOZERO` | - | Readback going to a zero setpoint (within `ZERO_TOLERANCE`) |
+| 4 / 5 | `GOPOS` / `GONEG` | - | Polarity change: not used by this IOC |
+| 6 | `SPNOTSET` | MINOR | Setpoint not reached within `SET_TIMEOUT_S` (`SP_NOT_REACHED`) |
+| 7 | `STATENOTSET` | MAJOR | State not reached within `SET_TIMEOUT_S` (`ST_NOT_REACHED`) |
+
+Commands are not sent again (no `RETRY`). `SPNOTSET` / `STATENOTSET` clear when the target is
+reached, on a new command, or with `STATE_SP` = `RESET`, which restarts both timeouts.
 
 ### Watchdogs
 
@@ -191,8 +208,9 @@ Faults win over `ST_NOT_REACHED`, which wins over `SP_NOT_REACHED`. Values from
 These are db macros with the same names, and live PVs, so they can also be
 changed at runtime. The timeout restarts when the readback gets closer to the
 setpoint, on a new setpoint and on a new state command. The setpoint check only
-runs while the supply is `ON`. The first `STATE_SP` command after boot arms the
-state check, so a supply left running is not reported. `SP_NOT_REACHED`,
+runs while the supply is `ON`. The first `CURRENT_SP` written after boot arms the
+setpoint check, the first `STATE_SP` command the state check, so a supply left
+running is not reported. `SP_NOT_REACHED`,
 `ST_NOT_REACHED`, `SP_ERR`, `SP_WDOG` and `ST_WDOG` can be read as PVs.
 
 ---
