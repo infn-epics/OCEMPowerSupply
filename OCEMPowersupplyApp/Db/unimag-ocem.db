@@ -69,12 +69,6 @@ record(mbbi, "$(P):$(R):STATE_RB") {
     field(FVVL, "5")
     field(FVST, "CONN_FAULT")
     field(FVSV, "MAJOR")
-    field(SXVL, "6")
-    field(SXST, "SP_NOT_REACHED")
-    field(SXSV, "MINOR")
-    field(SVVL, "7")
-    field(SVST, "ST_NOT_REACHED")
-    field(SVSV, "MAJOR")
 }
 
 # State calculation (same logic as unimag.db)
@@ -105,7 +99,7 @@ record(mbbo, "$(P):$(R):STATE_SP") {
     field(FRST, "INTERLOCK")
     field(FVVL, "5")
     field(FVST, "ERROR")
-    field(FLNK, "$(P):$(R):state_to_enable")
+    field(FLNK, "$(P):$(R):SM_RESET")
 }
 
 record(calcout, "$(P):$(R):state_to_enable") {
@@ -122,14 +116,12 @@ record(calcout, "$(P):$(R):state_to_enable") {
 # STATE_RB (aligned across the UNIMAG power-supply IOCs):
 #   0 OFF | 1 ON | 2 STANDBY | 3 FAULT (MAJOR) | 4 EXT_INTLK (MAJOR)
 #   5 CONN_FAULT (MAJOR, communication errors)
-#   6 SP_NOT_REACHED (MINOR, current setpoint not reached)
-#   7 ST_NOT_REACHED (MAJOR, commanded state not reached)
 #   8.. additional, device specific states
 #
 # The device logic decodes the plain state (0-5 and the device specific
-# ones) into STATE_BASE. The watchdogs below add 6 and 7 on top of it, and
-# STATE_FINAL selects what STATE_RB shows: faults win, then ST_NOT_REACHED,
-# then SP_NOT_REACHED.
+# ones) into STATE_BASE, and
+# STATE_FINAL copies it to STATE_RB. A setpoint or state not reached is a
+# software state: the watchdogs below report it in STATE_SM.
 #
 # Configuration (db macros, also live PVs):
 #   SET_TOLERANCE  (A) readback within this of CURRENT_SP counts as reached
@@ -177,13 +169,11 @@ record(ao, "$(P):$(R):STATE_BASE") {
     field(FLNK, "$(P):$(R):STATE_FINAL")
 }
 
-# Final state: faults win, then ST_NOT_REACHED, then SP_NOT_REACHED
+# Device state to STATE_RB
 record(calcout, "$(P):$(R):STATE_FINAL") {
-    field(DESC, "Final state incl. NOT_REACHED")
+    field(DESC, "Final state")
     field(INPA, "$(P):$(R):STATE_BASE NPP NMS")
-    field(INPB, "$(P):$(R):ST_NOT_REACHED NPP NMS")
-    field(INPC, "$(P):$(R):SP_NOT_REACHED NPP NMS")
-    field(CALC, "(A>=3&&A<=5)?A:(B?7:(C?6:A))")
+    field(CALC, "A")
     field(OUT,  "$(P):$(R):STATE_RB PP")
     field(OOPT, "Every Time")
 }
@@ -213,7 +203,8 @@ record(calc, "$(P):$(R):SP_WDOG") {
     field(INPF, "$(P):$(R):CURRENT_SP NPP NMS")
     field(INPG, "$(P):$(R):SP_LAST NPP NMS")
     field(INPH, "$(P):$(R):STATE_BASE NPP NMS")
-    field(CALC, "D<=0||H!=1&&H<8?0:(A<=(ABS(F)<=E?E:D)?0:(F!=G||A<C-D/20?0:B+1))")
+    field(INPI, "$(P):$(R):SP_ARMED PP NMS")
+    field(CALC, "!I||D<=0||H!=1&&H<8?0:(A<=(ABS(F)<=E?E:D)?0:(F!=G||A<C-D/20?0:B+1))")
     field(FLNK, "$(P):$(R):SP_NOT_REACHED")
 }
 
@@ -280,3 +271,102 @@ record(calc, "$(P):$(R):ST_LAST") {
     field(PINI, "YES")
     field(FLNK, "$(P):$(R):STATE_FINAL")
 }
+
+# ---------- UNIMAG state machine ----------
+# STATE_SM tells what the supply is doing; a setpoint or state not reached is
+# a software state, reported here and not in STATE_RB:
+#   0 READY | 1 GOTOSET | 2 GOTOSTATE | 3 GOZERO | 4 GOPOS | 5 GONEG
+#   6 SPNOTSET (MINOR, = SP_NOT_REACHED) | 7 STATENOTSET (MAJOR, = ST_NOT_REACHED)
+# A sequencer, when there is one, publishes its step in STATE_SM_STEP
+# (GOZERO / GOPOS / GONEG during a polarity change). Otherwise the readback
+# tells GOTOSET (GOZERO for a zero setpoint) and the state watchdog GOTOSTATE.
+# STATE_SP = RESET restarts both timeouts, clearing SPNOTSET / STATENOTSET.
+record(longout, "$(P):$(R):STATE_SM_STEP") {
+    field(DESC, "Sequencer step (0 = idle)")
+    field(VAL,  "0")
+    # STATE_SM_CALC is scanned: a FLNK would not process it, a write to PROC does
+    field(OUT,  "$(P):$(R):STATE_SM_CALC.PROC")
+}
+
+# Armed by the first setpoint change after boot: CURRENT_SP boots as 0 and
+# is not read from the supply, so a supply left running is not reported.
+record(calc, "$(P):$(R):SP_ARMED") {
+    field(DESC, "Setpoint command seen since boot")
+    field(INPA, "$(P):$(R):CURRENT_SP NPP NMS")
+    field(INPB, "$(P):$(R):SP_LAST NPP NMS")
+    field(INPC, "$(P):$(R):SP_ARMED NPP NMS")
+    field(CALC, "C||A!=B")
+}
+
+record(calc, "$(P):$(R):SP_BUSY") {
+    field(DESC, "Going to the setpoint")
+    field(INPA, "$(P):$(R):SP_ERR NPP NMS")
+    field(INPB, "$(P):$(R):SET_TOLERANCE NPP NMS")
+    field(INPC, "$(P):$(R):ZERO_TOLERANCE NPP NMS")
+    field(INPD, "$(P):$(R):CURRENT_SP NPP NMS")
+    field(INPE, "$(P):$(R):SP_ARMED NPP NMS")
+    field(INPF, "$(P):$(R):STATE_BASE NPP NMS")
+    field(CALC, "E&&B>0&&(F=1||F>=8)&&A>(ABS(D)<=C?C:B)?(ABS(D)<=C?2:1):0")
+}
+
+record(calcout, "$(P):$(R):STATE_SM_CALC") {
+    field(DESC, "Compute STATE_SM")
+    field(SCAN, "1 second")
+    field(INPA, "$(P):$(R):STATE_SM_STEP NPP NMS")
+    field(INPB, "$(P):$(R):ST_NOT_REACHED NPP NMS")
+    field(INPC, "$(P):$(R):SP_NOT_REACHED NPP NMS")
+    field(INPD, "$(P):$(R):ST_WDOG NPP NMS")
+    field(INPE, "$(P):$(R):SP_BUSY PP NMS")
+    field(CALC, "B?7:(C?6:(A?A:(D>0?2:(E=2?3:(E?1:0)))))")
+    field(OUT,  "$(P):$(R):STATE_SM PP")
+    field(OOPT, "Every Time")
+}
+
+record(mbbi, "$(P):$(R):STATE_SM") {
+    field(DESC, "UNIMAG state machine")
+    field(SCAN, "Passive")
+    field(ZRVL, "0")
+    field(ZRST, "READY")
+    field(ONVL, "1")
+    field(ONST, "GOTOSET")
+    field(TWVL, "2")
+    field(TWST, "GOTOSTATE")
+    field(THVL, "3")
+    field(THST, "GOZERO")
+    field(FRVL, "4")
+    field(FRST, "GOPOS")
+    field(FVVL, "5")
+    field(FVST, "GONEG")
+    field(SXVL, "6")
+    field(SXST, "SPNOTSET")
+    field(SXSV, "MINOR")
+    field(SVVL, "7")
+    field(SVST, "STATENOTSET")
+    field(SVSV, "MAJOR")
+}
+
+record(calcout, "$(P):$(R):SM_RESET") {
+    field(DESC, "STATE_SP RESET clears the watchdogs")
+    field(INPA, "$(P):$(R):STATE_SP NPP NMS")
+    field(CALC, "A=3")
+    field(OCAL, "0")
+    field(DOPT, "Use OCAL")
+    field(OUT,  "$(P):$(R):WDOG_CLEAR PP")
+    field(OOPT, "When Non-zero")
+    field(FLNK, "$(P):$(R):state_to_enable")
+}
+
+record(dfanout, "$(P):$(R):WDOG_CLEAR") {
+    field(DESC, "Clear the NOT_REACHED watchdogs")
+    field(VAL,  "0")
+    field(OUTA, "$(P):$(R):SP_WDOG.VAL NPP")
+    field(OUTB, "$(P):$(R):ST_WDOG.VAL NPP")
+    field(FLNK, "$(P):$(R):WDOG_CLEAR_FAN")
+}
+
+record(fanout, "$(P):$(R):WDOG_CLEAR_FAN") {
+    field(DESC, "Re-evaluate the NOT_REACHED flags")
+    field(LNK1, "$(P):$(R):SP_NOT_REACHED")
+    field(LNK2, "$(P):$(R):ST_NOT_REACHED")
+}
+
